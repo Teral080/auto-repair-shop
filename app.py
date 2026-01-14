@@ -23,5 +23,17 @@ async def init_session():
     if 'cars' not in session:
         session['cars'] = []
 
+@app.route('/')
+async def index():
+    clients = session.get('clients', [])
+    cars = session.get('cars', [])
+    return await render_template('index.html', clients=clients, cars=cars)
+
+# Список клиентов
+@app.route('/clients')
+async def client_list():
+    clients = session.get('clients', [])
+    return await render_template('clients.html', clients=clients)
+
 if __name__ == '__main__':
     app.run()
