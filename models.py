@@ -40,3 +40,26 @@ class Client(Base, BaseMixin):
             'address': self.address,
             'cars': [car.to_dict() for car in self.cars]  # Вложенные данные
         }
+    
+class Car(Base, BaseMixin):
+    client_id = Column(Integer, ForeignKey('client.id'), nullable=False)
+    make = Column(String(100), nullable=False)
+    model = Column(String(100), nullable=False)
+    year = Column(Integer, nullable=False)
+    vin = Column(String(17), unique=True, nullable=False)
+
+    # Связь с клиентом
+    client = relationship("Client", back_populates="cars")
+    # Связь с договорами (если нужно)
+    contracts = relationship("Contract", back_populates="car")
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'client_id': self.client_id,
+            'make': self.make,
+            'model': self.model,
+            'year': self.year,
+            'vin': self.vin,
+            'client': self.client.to_dict() if self.client else None
+        }
