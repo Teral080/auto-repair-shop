@@ -63,3 +63,18 @@ class Car(Base, BaseMixin):
             'vin': self.vin,
             'client': self.client.to_dict() if self.client else None
         }
+    
+# Инициализация базы данных
+async def create_all_tables():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+# Удобный доступ к сессии
+class Database:
+    def __init__(self):
+        self.session = async_session
+
+    async def create_all(self):
+        await create_all_tables()
+
+db = Database()
