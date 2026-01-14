@@ -21,3 +21,22 @@ class BaseMixin:
         return cls.__name__.lower()
 
     id = Column(Integer, primary_key=True, index=True)
+
+class Client(Base, BaseMixin):
+    full_name = Column(String(255), nullable=False)
+    phone = Column(String(20), nullable=False)
+    email = Column(String(255), nullable=True)
+    address = Column(Text, nullable=True)
+
+    # Связь с автомобилями
+    cars = relationship("Car", back_populates="client")
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'full_name': self.full_name,
+            'phone': self.phone,
+            'email': self.email,
+            'address': self.address,
+            'cars': [car.to_dict() for car in self.cars]  # Вложенные данные
+        }

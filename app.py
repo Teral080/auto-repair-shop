@@ -1,4 +1,4 @@
-import Sql
+import sqlalchemy
 from quart import Quart
 from config import Config
 from models import db
