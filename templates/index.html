@@ -1,9 +1,21 @@
 {% extends "base.html" %}
 <link rel="stylesheet" href="index.css">
-{% block title %}Главная{% endblock %}
+{% block title %}Главная | Автомастерская «АвтоСервис»{% endblock %}
 
 {% block content %}
-<div class="hero-section">
-    <h1>Добро пожаловать!</h1>
-    <p class="subtitle">Лучшие товары по доступным ценам</p>
+<div class="text-center py-5">
+    <h1>Добро пожаловать в Автомастерскую «АвтоСервис»</h1>
+    <p class="lead">Мы заботимся о вашем автомобиле!</p>
+    {% if session.get('user_id') %}
+        <p>Здравствуйте, {{ session.get('user_name') }}!</p>
+        <div class="mt-4">
+            <a href="{{ url_for('add_order') }}" class="btn btn-primary btn-lg">Добавить заказ</a>
+            <a href="{{ url_for('profile') }}" class="btn btn-outline-secondary btn-lg ms-2">Мой профиль</a>
+        </div>
+    {% else %}
+        <div class="mt-4">
+            <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">Войти</a>
+            <a href="{{ url_for('register') }}" class="btn btn-outline-secondary btn-lg ms-2">Зарегистрироваться</a>
+        </div>
+    {% endif %}
 </div>
