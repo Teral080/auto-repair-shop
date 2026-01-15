@@ -19,3 +19,17 @@
         </div>
     {% endif %}
 </div>
+
+<div class="row mt-5">
+    <!-- Блок "Учёт клиентов" — только для менеджеров, мастеров, админов -->
+    {% if session.get('user_role') in ['admin', 'manager', 'master'] %}
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Учет клиентов</h5>
+                <p class="card-text">Регистрируйте клиентов, их автомобили и историю обслуживания.</p>
+                <a href="{{ url_for('client_list') }}" class="btn btn-primary">Перейти</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
