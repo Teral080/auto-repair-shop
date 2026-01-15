@@ -46,3 +46,25 @@
         </div>
     </div>
     {% endif %}
+
+    <!-- Блок "Отчетность" — только для персонала -->
+    {% if session.get('user_role') in ['admin', 'manager', 'master'] %}
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Отчетность</h5>
+                <p class="card-text">Генерируйте отчеты по выполненным работам и анализируйте статистику.</p>
+                <a href="{{ url_for('reports') }}" class="btn btn-info">Отчёты</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Если пользователь не авторизован -->
+{% if not session.get('user_id') %}
+<div class="text-center mt-4">
+    <p>Пожалуйста, <a href="{{ url_for('login') }}">войдите</a> или <a href="{{ url_for('register') }}">зарегистрируйтесь</a>.</p>
+</div>
+{% endif %}
+{% endblock %}
