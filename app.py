@@ -143,5 +143,17 @@ async def logout():
     await flash('Вы вышли из системы.', 'info')
     return redirect(url_for('index'))
 
+# Список клиентов (только для персонала)
+@app.route('/clients')
+async def client_list():
+    if not session.get('user_id'):
+        return redirect(url_for('login'))
+    if session.get('user_role') not in ['admin', 'manager', 'master']:
+        await flash('У вас нет доступа к этому разделу.', 'warning')
+        return redirect(url_for('index'))
+
+    clients = session['clients']
+    return await render_template('clients.html', clients=clients)
+
 if __name__ == '__main__':
     app.run()
