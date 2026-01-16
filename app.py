@@ -155,5 +155,40 @@ async def client_list():
     clients = session['clients']
     return await render_template('clients.html', clients=clients)
 
+# Добавление клиента (только для персонала)
+@app.route('/clients/add', methods=['GET', 'POST'])
+async def add_client():
+    if not session.get('user_id'):
+        return redirect(url_for('login'))
+    if session.get('user_role') not in ['admin', 'manager', 'master']:
+        await flash('У вас нет прав на добавление клиентов.', 'warning')
+        return redirect(url_for('index'))
+
+    if request.method == 'POST':
+        form = await request.form
+        full_name = form.get('full_name', '').strip()
+        phone = form.get('phone', '').strip()
+        email = form.get('email', '').strip()
+        address = form.get('address', '').strip()
+
+        if not full_name or not phone:
+            await flash('ФИО и телефон обязательны!', 'danger')
+            return await render_template('client_form.html', editing=False)
+
+        new_client = {
+            'id': str(uuid.uuid4()),
+            'full_name': full_name,
+            'phone': phone,
+            'email': email,
+            'address': address
+        }
+        clients = session['clients']
+        clients.append(new_client)
+        session['clients'] = clients
+        await flash('Клиент успешно добавлен!', 'success')
+        return redirect(url_for('client_list'))
+
+    return await render_template('client_form.html', editing=False)
+
 if __name__ == '__main__':
     app.run()
