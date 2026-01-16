@@ -220,6 +220,16 @@ async def add_order():
         services=services,
         parts=parts
     )
+# Отчёты (только для персонала)
+@app.route('/reports')
+async def reports():
+    if not session.get('user_id'):
+        return redirect(url_for('login'))
+    if session.get('user_role') not in ['admin', 'manager', 'master']:
+        await flash('У вас нет доступа к отчётам.', 'warning')
+        return redirect(url_for('index'))
+
+    return await render_template('reports.html')
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
