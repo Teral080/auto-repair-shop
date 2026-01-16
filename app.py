@@ -114,6 +114,34 @@ async def register():
         return redirect(url_for('login'))
 
     return await render_template('reg.html')
+# Вход
+@app.route('/login', methods=['GET', 'POST'])
+async def login():
+    if request.method == 'POST':
+        form = await request.form
+        email = form.get('email')
+        password = form.get('password')
+
+        user = find_user_by_email(email)
+        if user and check_password_hash(user['password_hash'], password):
+            session['user_id'] = user['id']
+            session['user_name'] = user['full_name']
+            session['user_role'] = user['role']
+            await flash(f'Добро пожаловать, {user["full_name"]}!', 'success')
+            return redirect(url_for('index'))
+        else:
+            await flash('Неверный email или пароль', 'danger')
+
+    return await render_template('login.html')
+
+# Выход
+@app.route('/logout')
+async def logout():
+    session.pop('user_id', None)
+    session.pop('user_name', None)
+    session.pop('user_role', None)
+    await flash('Вы вышли из системы.', 'info')
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run()
