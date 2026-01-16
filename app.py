@@ -63,17 +63,57 @@ def require_role(*allowed_roles):
     """Декоратор-заглушка (вручную проверяем роль в каждом эндпоинте)"""
     pass  # В Quart нет встроенного декоратора, делаем проверку внутри
 
+# Главная страница
 @app.route('/')
 async def index():
-    clients = session.get('clients', [])
-    cars = session.get('cars', [])
-    return await render_template('index.html', clients=clients, cars=cars)
+    return await render_template('index.html')
 
-# Список клиентов
-@app.route('/clients')
-async def client_list():
-    clients = session.get('clients', [])
-    return await render_template('clients.html', clients=clients)
+# Регистрация
+@app.route('/register', methods=['GET', 'POST'])
+async def register():
+    if request.method == 'POST':
+        form = await request.form
+        full_name = form.get('full_name', '').strip()
+        email = form.get('email', '').strip()
+        phone = form.get('phone', '').strip()
+        password = form.get('password', '')
+        confirm_password = form.get('confirm_password', '')
+
+        # Валидация
+        if not all([full_name, email, phone, password]):
+            await flash('Все поля обязательны!', 'danger')
+            return await render_template('reg.html')
+
+        if password != confirm_password:
+            await flash('Пароли не совпадают!', 'danger')
+            return await render_template('reg.html')
+
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            await flash('Некорректный email!', 'danger')
+            return await render_template('reg.html')
+
+        if find_user_by_email(email):
+            await flash('Пользователь с таким email уже существует!', 'danger')
+            return await render_template('reg.html')
+
+        # Роль назначается автоматически — "client"
+        new_user = {
+            'id': str(uuid.uuid4()),
+            'full_name': full_name,
+            'email': email,
+            'phone': phone,
+            'password_hash': generate_password_hash(password),
+            'role': 'client'  # ←←← Клиент НЕ выбирает роль!
+        }
+
+        users = session['users']
+        users.append(new_user)
+        session['users'] = users
+
+        await flash('Регистрация успешна! Теперь вы можете войти.', 'success')
+        return redirect(url_for('login'))
+
+    return await render_template('reg.html')
 
 if __name__ == '__main__':
     app.run()
