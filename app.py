@@ -190,5 +190,36 @@ async def add_client():
 
     return await render_template('client_form.html', editing=False)
 
+# Добавление заказа (доступно всем авторизованным)
+@app.route('/add_order', methods=['GET', 'POST'])
+async def add_order():
+    if not session.get('user_id'):
+        return redirect(url_for('login'))
+
+    if request.method == 'POST':
+        # Здесь можно добавить логику сохранения заказа
+        await flash('Заказ успешно создан! (Демо-режим)', 'success')
+        return redirect(url_for('index'))
+
+    # Передаём данные для выпадающих списков (в демо — статика)
+    clients = session['clients']
+    cars = session['cars']
+    services = [
+        {'id': 1, 'name': 'Замена масла', 'price': 1500},
+        {'id': 2, 'name': 'Диагностика', 'price': 2000}
+    ]
+    parts = [
+        {'id': 1, 'name': 'Масляный фильтр', 'price': 400, 'stock': 10},
+        {'id': 2, 'name': 'Тормозные колодки', 'price': 2500, 'stock': 5}
+    ]
+
+    return await render_template(
+        'add_order.html',
+        clients=clients,
+        cars=cars,
+        services=services,
+        parts=parts
+    )
+
 if __name__ == '__main__':
     app.run()
