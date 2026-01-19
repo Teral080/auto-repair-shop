@@ -8,24 +8,4 @@
     <p class="subtitle">вот все пользователи</p>
 </div>
 
-<div class="profile-content">
-    {% if session.user_id %}
-        <div class="profile-card">
-            <h2>Ваш профиль</h2>
-            <p><strong>ФИО:</strong> {{ session.user_name }}</p>
-            <p><strong>Роль:</strong> {{ session.user_role|title }}</p>
-            <p><strong>Email:</strong> {{ session.user_email or 'Не указан' }}</p>
-            <p><strong>Телефон:</strong> {{ session.user_phone or 'Не указан' }}</p>
-
-             <div class="profile-actions">
-                <a href="{{ url_for('logout') }}" class="logout-btn"> Выйти</a>
-            </div>
-        </div>
-    {% else %}
-        <div class="profile-card">
-            <p>Вы не авторизованы.</p>
-            <a href="{{ url_for('login') }}" class="login-btn">Войти</a>
-        </div>
-    {% endif %}
-</div>
 {% endblock %}
