@@ -1,0 +1,15 @@
+.hero-section {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+}
+
+.hero-section h1 {
+    color: #1b1e20;
+    font-size: 2rem;
+}
+
+.subtitle {
+    color: #5f6468;
+    font-size: 1.1rem;
+}
