@@ -8,4 +8,38 @@
     <p class="subtitle">вот все пользователи</p>
 </div>
 
+<div class="container mt-4">
+    {% if session.get('user_role') == 'admin' %}
+        {% if users %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ФИО</th>
+                            <th>Email</th>
+                            <th>Телефон</th>
+                            <th>Роль</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user.full_name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.phone }}</td>
+                            <td><span class="badge bg-secondary">{{ user.role }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-muted">Нет зарегистрированных пользователей.</p>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-warning">
+            У вас нет прав для просмотра списка пользователей.
+        </div>
+    {% endif %}
+</div>
 {% endblock %}
