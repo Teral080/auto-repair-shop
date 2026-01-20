@@ -10,31 +10,31 @@
     <!-- Шапка -->
     <nav class="global-section">
         <div class="container">
-            <a class="navbar-brand" href="{{ url_for('index') }}">Автомастерская «АвтоСервис»</a>
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">Автомастерская «АвтоСервис»</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('index') }}">Главная</a>
+                        <a class="nav-link" href="{{ url_for('main.index') }}">Главная</a>
                     </li>
                     {% if session.get('user_id') %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('profile') }}">Профиль</a>
+                            <a class="nav-link" href="{{ url_for('main.profile') }}">Профиль</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('add_order') }}">Добавить заказ</a>
+                            <a class="nav-link" href="{{ url_for('main.add_order') }}">Добавить заказ</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('logout') }}">Выход</a>
+                            <a class="nav-link" href="{{ url_for('main.logout') }}">Выход</a>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('login') }}">Вход</a>
+                            <a class="nav-link" href="{{ url_for('main.login') }}">Вход</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('register') }}">Регистрация</a>
+                            <a class="nav-link" href="{{ url_for('main.register') }}">Регистрация</a>
                         </li>
                     {% endif %}
                 </ul>

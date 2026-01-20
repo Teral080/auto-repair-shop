@@ -10,7 +10,7 @@
                 <h3>Вход в систему</h3>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ url_for('login') }}">
+                <form method="POST" action="{{ url_for('main.login') }}">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control" id="email" name="email" required>
@@ -24,7 +24,7 @@
                     </div>
                 </form>
                 <hr>
-                <p class="text-center">Нет аккаунта? <a href="{{ url_for('register') }}">Зарегистрируйтесь</a></p>
+                <p class="text-center">Нет аккаунта? <a href="{{ url_for('main.register') }}">Зарегистрируйтесь</a></p>
             </div>
         </div>
     </div>

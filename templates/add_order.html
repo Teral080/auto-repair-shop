@@ -14,7 +14,7 @@
                 <h3>Добавить новый заказ-наряд</h3>
             </div>
             <div class="card-body">
-                <form method="POST" action="{{ url_for('add_order') }}">
+                <form method="POST" action="{{ url_for('main.add_order') }}">
                     <div class="mb-3">
                         <label for="client_id" class="form-label">Клиент</label>
                         <select class="form-select" id="client_id" name="client_id" required>

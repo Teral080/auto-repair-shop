@@ -9,13 +9,13 @@
     {% if session.get('user_id') %}
         <p>Здравствуйте, {{ session.get('user_name') }}!</p>
         <div class="mt-4">
-            <a href="{{ url_for('add_order') }}" class="btn btn-primary btn-lg">Добавить заказ</a>
-            <a href="{{ url_for('profile') }}" class="btn btn-outline-secondary btn-lg ms-2">Мой профиль</a>
+            <a href="{{ url_for('main.add_order') }}" class="btn btn-primary btn-lg">Добавить заказ</a>
+            <a href="{{ url_for('main.profile') }}" class="btn btn-outline-secondary btn-lg ms-2">Мой профиль</a>
         </div>
     {% else %}
         <div class="mt-4">
-            <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">Войти</a>
-            <a href="{{ url_for('register') }}" class="btn btn-outline-secondary btn-lg ms-2">Зарегистрироваться</a>
+            <a href="{{ url_for('main.login') }}" class="btn btn-primary btn-lg">Войти</a>
+            <a href="{{ url_for('main.register') }}" class="btn btn-outline-secondary btn-lg ms-2">Зарегистрироваться</a>
         </div>
     {% endif %}
 </div>
@@ -28,7 +28,7 @@
             <div class="card-body">
                 <h5 class="card-title">Учет клиентов</h5>
                 <p class="card-text">Регистрируйте клиентов, их автомобили и историю обслуживания.</p>
-                <a href="{{ url_for('client_list') }}" class="btn btn-primary">Перейти</a>
+                <a href="{{ url_for('main.client_list') }}" class="btn btn-primary">Перейти</a>
             </div>
         </div>
     </div>
@@ -41,7 +41,7 @@
             <div class="card-body">
                 <h5 class="card-title">Оформление заказов</h5>
                 <p class="card-text">Создавайте заказ-наряды, добавляйте услуги и запчасти.</p>
-                <a href="{{ url_for('add_order') }}" class="btn btn-success">Новый заказ</a>
+                <a href="{{ url_for('main.add_order') }}" class="btn btn-success">Новый заказ</a>
             </div>
         </div>
     </div>
@@ -54,7 +54,7 @@
             <div class="card-body">
                 <h5 class="card-title">Отчетность</h5>
                 <p class="card-text">Генерируйте отчеты по выполненным работам и анализируйте статистику.</p>
-                <a href="{{ url_for('reports') }}" class="btn btn-info">Отчёты</a>
+                <a href="{{ url_for('main.reports') }}" class="btn btn-info">Отчёты</a>
             </div>
         </div>
     </div>
@@ -64,7 +64,7 @@
 <!-- Если пользователь не авторизован -->
 {% if not session.get('user_id') %}
 <div class="text-center">
-    <p>Пожалуйста, <a href="{{ url_for('login') }}">войдите</a> или <a href="{{ url_for('register') }}">зарегистрируйтесь</a>.</p>
+    <p>Пожалуйста, <a href="{{ url_for('main.login') }}">войдите</a> или <a href="{{ url_for('main.register') }}">зарегистрируйтесь</a>.</p>
 </div>
 {% endif %}
 
