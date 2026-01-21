@@ -1,10 +1,11 @@
 import os
+import asyncpg
 
 class Config:
     SECRET_KEY = os.getenv('SECRET_KEY', '1111')
     SQLALCHEMY_DATABASE_URI = os.getenv(
         'DATABASE_URL',
-        'postgresql://postgres:postgres@localhost:5432/auto_repair'
+        'postgresql+asyncpg://postgres:postgres@localhost:5432/auto_repair'
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 

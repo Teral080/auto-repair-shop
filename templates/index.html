@@ -10,7 +10,7 @@
         <p>Здравствуйте, {{ session.get('user_name') }}!</p>
         <div class="mt-4">
             <a href="{{ url_for('main.add_order') }}" class="btn btn-primary btn-lg">Добавить заказ</a>
-            <a href="{{ url_for('main.profile') }}" class="btn btn-outline-secondary btn-lg ms-2">Мой профиль</a>
+            <a href="{{ url_for('main.profil') }}" class="btn btn-outline-secondary btn-lg ms-2">Мой профиль</a>
         </div>
     {% else %}
         <div class="mt-4">
