@@ -1,6 +1,28 @@
 .global-section {
- text-align: center;
+    text-align: center;
+    background-color: #7f8ca3;
+    height: 130px;
+    padding: auto;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 25px;
 }
+
+.global-section a {
+    text-decoration: none;
+    color: inherit;
+    outline: none;
+}
+
+.ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    display: inline;
+}
+
 
 .navbar-brand {
             font-weight: bold;
