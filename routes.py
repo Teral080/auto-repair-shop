@@ -97,6 +97,8 @@ async def login():
             session['user_id'] = user['id']
             session['user_name'] = user['full_name']
             session['user_role'] = user['role']
+            session['user_email'] = user['email'] 
+            session['user_phone'] = user['phone'] 
             await flash(f'Добро пожаловать, {user["full_name"]}!', 'success')
             return redirect(url_for('main.index'))
         else:
@@ -116,6 +118,9 @@ async def logout():
 #Профиль 
 @bp.route('/profil')
 async def profil():
+    if 'user_id' not in session:
+        await flash('Пожалуйста, войдите в систему.', 'warning')
+        return redirect(url_for('main.login'))
     return await render_template('profil.html')
 
 # Список клиентов (только для персонала)

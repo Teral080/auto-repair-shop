@@ -2,12 +2,12 @@ from sqlalchemy import Column, Integer, String, Text, ForeignKey
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.ext.declarative import declared_attr
-from config import Config  # Теперь безопасно
+from config import Config  
 
 # Получаем URL из конфигурации
 DATABASE_URL = Config.SQLALCHEMY_DATABASE_URI
 
-# Создаём движок для PostgreSQL (НЕ sqlite!)
+# Создаём движок для PostgreSQL 
 engine = create_async_engine(DATABASE_URL, echo=True, future=True)
 
 # Асинхронная сессия
