@@ -6,7 +6,7 @@ from routes import bp
 def create_app():
     app = Quart(__name__)
     app.config.from_object(Config)
-    app.secret_key = app.config.get('SECRET_KEY') or 'auto-service-secret-key-quart'
+    app.secret_key = app.config.get('SECRET_KEY') or '1111'
 
     # Регистрируем blueprint
     app.register_blueprint(bp)

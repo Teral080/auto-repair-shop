@@ -113,6 +113,11 @@ async def logout():
     await flash('Вы вышли из системы.', 'info')
     return redirect(url_for('main.index'))
 
+#Профиль 
+@bp.route('/profil')
+async def profil():
+    return await render_template('profil.html')
+
 # Список клиентов (только для персонала)
 @bp.route('/clients')
 async def client_list():
@@ -120,7 +125,7 @@ async def client_list():
         return redirect(url_for('main.login'))
     if session.get('user_role') not in ['admin', 'manager', 'master']:
         await flash('У вас нет доступа к этому разделу.', 'warning')
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.profil'))
 
     clients = session['clients']
     return await render_template('clients.html', clients=clients)
