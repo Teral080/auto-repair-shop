@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-<link rel="stylesheet" href="users.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='users.css') }}">
 {% block title %}Пользователи{% endblock %}
 
 {% block content %}

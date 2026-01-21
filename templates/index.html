@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-<link rel="stylesheet" href="index.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
 {% block title %}Главная | Автомастерская «АвтоСервис»{% endblock %}
 
 {% block content %}
