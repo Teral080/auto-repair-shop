@@ -85,20 +85,14 @@ async def register():
             await flash('Некорректный email!', 'danger')
             return await render_template('reg.html')
 
-        if find_user_by_email(email):
+        # Проверка существования email в БД
+        existing = await get_user_by_email(email)
+        if existing:
             await flash('Пользователь с таким email уже существует!', 'danger')
             return await render_template('reg.html')
 
-        new_user = {
-            'id': str(uuid.uuid4()),
-            'full_name': full_name,
-            'email': email,
-            'phone': phone,
-            'password_hash': generate_password_hash(password),
-            'role': 'client'
-        }
-
-        session['users'].append(new_user)
+        # Создаём пользователя
+        await create_user(full_name, email, phone, password, role='client')
         await flash('Регистрация успешна! Теперь вы можете войти.', 'success')
         return redirect(url_for('main.login'))
 
