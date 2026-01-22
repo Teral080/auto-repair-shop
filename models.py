@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey
 from sqlalchemy.orm import relationship, declarative_base
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.ext.declarative import declared_attr
 from config import Config  
 
@@ -12,6 +12,7 @@ engine = create_async_engine(DATABASE_URL, echo=True, future=True)
 
 # Асинхронная сессия
 async_session = AsyncSession(engine, expire_on_commit=False)
+async_session = async_sessionmaker(engine, expire_on_commit=False)
 
 Base = declarative_base()
 
