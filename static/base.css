@@ -99,3 +99,15 @@ body {
     color: inherit;
     outline: flex;
 }
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 25px;
+    margin-top: 22px;
+}
+.col-md-4 {
+    flex: 0 0 calc(33.333% - 20px);
+    padding: 0 10px;
+    margin-bottom: 1.5rem;
+}
