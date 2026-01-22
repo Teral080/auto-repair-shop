@@ -3,6 +3,8 @@ from quart import Blueprint, render_template, request, redirect, url_for, flash,
 from werkzeug.security import generate_password_hash, check_password_hash
 import uuid
 import re
+from models import async_session, User, Client, Car
+from sqlalchemy import select
 
 # Создаём Blueprint
 bp = Blueprint('main', __name__)
@@ -13,30 +15,13 @@ def find_user_by_email(email):
 def find_client(client_id):
     return next((c for c in session.get('clients', []) if c['id'] == client_id), None)
 
-def init_session_data():
-    """Инициализация данных в сессии при первом обращении"""
-    if 'users' not in session:
-        admin = {
-            'id': str(uuid.uuid4()),
-            'full_name': 'Админ Админович',
-            'email': 'admin@autoservice.ru',
-            'phone': '+79990000000',
-            'password_hash': generate_password_hash('admin'),
-            'role': 'admin'
-        }
-        session['users'] = [admin]
-
-    if 'clients' not in session:
-        session['clients'] = []
-    if 'cars' not in session:
-        session['cars'] = []
-    if 'orders' not in session:
-        session['orders'] = []
-
-@bp.before_app_request
-async def before_request():
-    init_session_data()
-
+#Вспомогательные функции
+async def get_user_by_email(email: str):
+    """Получить пользователя по email из БД"""
+    async with async_session() as s:
+        result = await s.execute(select(User).where(User.email == email))
+        return result.scalar_one_or_none()
+    
 # Главная страница
 @bp.route('/')
 async def index():
