@@ -8,7 +8,7 @@ from config import Config
 DATABASE_URL = Config.SQLALCHEMY_DATABASE_URI
 
 # Создаём движок для PostgreSQL 
-engine = create_async_engine(DATABASE_URL, echo=True, future=True)
+engine = create_async_engine(DATABASE_URL, future=True)
 
 # Асинхронная сессия
 async_session = AsyncSession(engine, expire_on_commit=False)

@@ -5,7 +5,7 @@ from routes import bp
 from models import async_session, User, create_all_tables
 from werkzeug.security import generate_password_hash
 import logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.WARNING)
 
 app = Quart(__name__)
 
