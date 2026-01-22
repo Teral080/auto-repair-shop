@@ -1,16 +1,12 @@
 # routes.py
 from quart import Blueprint, render_template, request, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
-import uuid
 import re
 from models import async_session, User, Client, Car
 from sqlalchemy import select
 
 # Создаём Blueprint
 bp = Blueprint('main', __name__)
-
-def find_user_by_email(email):
-    return next((u for u in session.get('users', []) if u['email'] == email), None)
 
 def find_client(client_id):
     return next((c for c in session.get('clients', []) if c['id'] == client_id), None)
@@ -106,7 +102,7 @@ async def login():
         email = form.get('email')
         password = form.get('password')
 
-        user = find_user_by_email(email)
+        user = await get_user_by_email(email)
         if user and check_password_hash(user.password_hash, password):
             session['user_id'] = user.id
             session['user_name'] = user.full_name

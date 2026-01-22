@@ -4,6 +4,8 @@ from config import Config
 from routes import bp
 from models import async_session, User, create_all_tables
 from werkzeug.security import generate_password_hash
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
 app = Quart(__name__)
 
@@ -35,9 +37,9 @@ async def startup():
             )
             s.add(new_admin)
             await s.commit()
-            print("✅ Админ создан.")
+            print(" Админ создан.")
             
 if __name__ == '__main__':
-
     app = create_app()
-    app.run(debug=True)
+    app.run(debug=True, host='127.0.0.1', port=5000)
+
