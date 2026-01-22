@@ -55,6 +55,22 @@ class Car(Base, BaseMixin):
             'year': self.year,
             'vin': self.vin,
         }
+    
+class User(Base, BaseMixin):
+    full_name = Column(String(255), nullable=False)
+    email = Column(String(255), unique=True, nullable=False)
+    phone = Column(String(20), nullable=False)
+    password_hash = Column(String(255), nullable=False)
+    role = Column(String(20), nullable=False)  # 'admin', 'client', 'manager', 'master'
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'full_name': self.full_name,
+            'email': self.email,
+            'phone': self.phone,
+            'role': self.role,
+        }
 
 # Утилита для создания таблиц
 async def create_all_tables():
