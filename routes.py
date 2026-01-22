@@ -107,13 +107,11 @@ async def login():
         password = form.get('password')
 
         user = find_user_by_email(email)
-        if user and check_password_hash(user['password_hash'], password):
-            session['user_id'] = user['id']
-            session['user_name'] = user['full_name']
-            session['user_role'] = user['role']
-            session['user_email'] = user['email'] 
-            session['user_phone'] = user['phone'] 
-            await flash(f'Добро пожаловать, {user["full_name"]}!', 'success')
+        if user and check_password_hash(user.password_hash, password):
+            session['user_id'] = user.id
+            session['user_name'] = user.full_name
+            session['user_role'] = user.role
+            await flash(f'Добро пожаловать, {user.full_name}!', 'success')
             return redirect(url_for('main.index'))
         else:
             await flash('Неверный email или пароль', 'danger')
