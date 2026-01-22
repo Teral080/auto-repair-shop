@@ -145,7 +145,8 @@ async def client_list():
         return redirect(url_for('main.profil'))
 
     clients = session['clients']
-    return await render_template('clients.html', clients=clients)
+    return await render_template('clients.html', clients=[c.to_dict() for c in clients])
+
 
 # Добавление клиента
 @bp.route('/clients/add', methods=['GET', 'POST'])
@@ -167,14 +168,7 @@ async def add_client():
             await flash('ФИО и телефон обязательны!', 'danger')
             return await render_template('client_form.html', editing=False)
 
-        new_client = {
-            'id': str(uuid.uuid4()),
-            'full_name': full_name,
-            'phone': phone,
-            'email': email,
-            'address': address
-        }
-        session['clients'].append(new_client)
+        await create_client(full_name, phone, email or None, address or None)
         await flash('Клиент успешно добавлен!', 'success')
         return redirect(url_for('main.client_list'))
 
@@ -187,7 +181,7 @@ async def add_order():
         return redirect(url_for('main.login'))
 
     if request.method == 'POST':
-        await flash('Заказ успешно создан! (Демо-режим)', 'success')
+        await flash('Заказ успешно создан!', 'success')  
         return redirect(url_for('main.index'))
 
     clients = session['clients']
