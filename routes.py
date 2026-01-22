@@ -22,6 +22,41 @@ async def get_user_by_email(email: str):
         result = await s.execute(select(User).where(User.email == email))
         return result.scalar_one_or_none()
     
+async def get_all_clients():
+    """Получить всех клиентов"""
+    async with async_session() as s:
+        result = await s.execute(select(Client))
+        return result.scalars().all()
+
+async def create_user(full_name: str, email: str, phone: str, password: str, role: str = 'client'):
+    """Создать нового пользователя"""
+    async with async_session() as s:
+        new_user = User(
+            full_name=full_name,
+            email=email,
+            phone=phone,
+            password_hash=generate_password_hash(password),
+            role=role
+        )
+        s.add(new_user)
+        await s.commit()
+        await s.refresh(new_user)
+        return new_user
+
+async def create_client(full_name: str, phone: str, email: str = None, address: str = None):
+    """Создать нового клиента"""
+    async with async_session() as s:
+        new_client = Client(
+            full_name=full_name,
+            phone=phone,
+            email=email or None,
+            address=address or None
+        )
+        s.add(new_client)
+        await s.commit()
+        await s.refresh(new_client)
+        return new_client
+    
 # Главная страница
 @bp.route('/')
 async def index():
