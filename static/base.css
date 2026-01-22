@@ -1,7 +1,7 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #ffffff;
+    background-color: #e2e2e2;
     color: #333;
 }
 
@@ -153,6 +153,13 @@ body {
     padding: 1.5px 8px;
     font-size: 17px;
     border-radius: 5px;
+    color: #ffffff;
+}
+
+.btn-outline-secondary {
+    color: #ffffff;
+    background-color: transparent;
+    border-color: #6c757d;
 }
 
 .btn-primary {
@@ -162,8 +169,21 @@ body {
     border-radius: 5px;
 }
 
-.btn-outline-secondary {
-    color: #6c757d;
+.btn-success {
+    color: #fff;
     background-color: transparent;
     border-color: #6c757d;
+    border-radius: 5px;
 }
+.btn-info {
+    color: #fff;
+    background-color: transparent;
+    border-color: #6c757d;
+    border-radius: 5px;
+}
+
+.btn:hover {
+    background-color: #6c757d;
+    color: white;
+}
+
