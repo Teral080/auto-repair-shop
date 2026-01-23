@@ -1,12 +1,207 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #e2e2e2;
+    color: #333;
+}
+
+.container {
+    width: 90%;
+    margin: 0 auto;
+    padding: 15px;
+    min-height: 80vh;
+}
+
+/* Шапка */
+.global-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #7f8ca3;
+    height: 80px;
+    padding: 20px;
+    box-sizing: border-box;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 25px;
+    color: rgb(36, 64, 221);
+}
+
+.global-section .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0;
+    max-width: 1200px;
+}
+
+.global-section a {
+    text-decoration: none;
+    color: inherit;
+    outline: none;
+}
+
 .navbar-brand {
-            font-weight: bold;
-        }
-        .container {
-            min-height: 80vh;
-        }
-        footer {
-            background-color: #f8f9fa;
-            padding: 20px 0;
-            margin-top: 40px;
-            text-align: center;
-        }
+    font-weight: bold;
+    text-decoration: none;
+    color: inherit;
+    white-space: nowrap;
+}
+
+/* Навигация */
+.navbar-nav-ms-auto {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.navbar-nav-ms-auto .nav-item {
+    display: inline;
+}
+
+.navbar-nav-ms-auto .nav-link {
+    color: rgb(36, 64, 221);
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 22px;
+    white-space: nowrap;
+}
+
+.navbar-nav-ms-auto .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.hero-section {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.hero-section h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    font-size: 19px;
+    color: #000000;
+    margin-bottom: 1rem;
+}
+
+.hero-section p {
+    font-size: 19px;
+    color: #000000;
+    margin-bottom: 1rem;
+}
+
+.mt-4 a {
+    text-decoration: none;
+    color: inherit;
+    outline: flex;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 25px;
+    margin-top: 22px;
+}
+.col-md-4 {
+    flex: 0 0 calc(33.333% - 20px);
+    padding: 0 10px;
+    margin-bottom: 1.5rem;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 12px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.card-body {
+    flex: 1;
+    padding: 10px;
+}
+
+.card-title {
+    margin-top: 0;
+    font-size: 18px;
+    color: #252525;
+    text-align: center;
+}
+
+.card-text {
+    color: #333333;
+    margin-bottom: 7px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 2px 15px;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    border: 1px solid transparent;
+}
+
+.btn-lg {
+    padding: 1.5px 8px;
+    font-size: 17px;
+    border-radius: 5px;
+    color: #ffffff;
+}
+
+.btn-outline-secondary {
+    color: #ffffff;
+    background-color: transparent;
+    border-color: #6c757d;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: transparent;
+    border-color: #6c757d;
+    border-radius: 5px;
+}
+
+.btn-success {
+    color: #fff;
+    background-color: transparent;
+    border-color: #6c757d;
+    border-radius: 5px;
+}
+.btn-info {
+    color: #fff;
+    background-color: transparent;
+    border-color: #6c757d;
+    border-radius: 5px;
+}
+
+.btn:hover {
+    background-color: #6c757d;
+    color: white;
+}
+
+#map {
+    margin: 5px auto;
+    display: block;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+h2.text-center {
+    text-align: center;
+    color: #333;
+}
