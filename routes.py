@@ -97,6 +97,7 @@ async def register():
 # Вход
 @bp.route('/login', methods=['GET', 'POST'])
 async def login():
+    # Запрещаем staff заходить сюда
     if request.method == 'POST':
         form = await request.form
         email = form.get('email')
@@ -104,6 +105,11 @@ async def login():
 
         user = await get_user_by_email(email)
         if user and check_password_hash(user.password_hash, password):
+            # Клиенты могут входить, staff — нет!
+            if user.role in ['admin', 'manager', 'master']:
+                await flash('Сотрудники должны входить через специальную форму.', 'warning')
+                return await render_template('login.html')
+            
             session['user_id'] = user.id
             session['user_name'] = user.full_name
             session['user_role'] = user.role
@@ -113,6 +119,30 @@ async def login():
             await flash('Неверный email или пароль', 'danger')
 
     return await render_template('login.html')
+
+@bp.route('/staff/login', methods=['GET', 'POST'])
+async def staff_login():
+    if request.method == 'POST':
+        form = await request.form
+        email = form.get('email')
+        password = form.get('password')
+
+        user = await get_user_by_email(email)
+        if user and check_password_hash(user.password_hash, password):
+            # Только staff могут войти
+            if user.role not in ['admin', 'manager', 'master']:
+                await flash('Только сотрудники могут использовать эту форму.', 'danger')
+                return await render_template('staff_login.html')
+            
+            session['user_id'] = user.id
+            session['user_name'] = user.full_name
+            session['user_role'] = user.role
+            await flash(f'Добро пожаловать, {user.full_name}!', 'success')
+            return redirect(url_for('main.index'))
+        else:
+            await flash('Неверный email или пароль', 'danger')
+
+    return await render_template('staff_login.html')
 
 # Выход
 @bp.route('/logout')
