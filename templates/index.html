@@ -16,18 +16,15 @@
                 <a href="{{ url_for('main.my_orders') }}" class="btn btn-primary btn-lg">Мои заказы</a>
                 <a href="{{ url_for('main.profil') }}" class="btn btn-outline-secondary btn-lg ms-2">Профиль</a>
             {% else %}
-                <!-- Для staff: быстрый доступ к своим задачам -->
                 <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary btn-lg">Панель управления</a>
                 <a href="{{ url_for('main.profil') }}" class="btn btn-outline-secondary btn-lg ms-2">Профиль</a>
             {% endif %}
         </div>
     {% else %}
-        <!-- Неавторизованный: ТОЛЬКО клиентский вход -->
         <div class="mt-4">
             <a href="{{ url_for('main.login') }}" class="btn btn-primary btn-lg">Войти как клиент</a>
             <a href="{{ url_for('main.register') }}" class="btn btn-outline-secondary btn-lg ms-2">Регистрация</a>
         </div>
-        <!-- ❗ НИКАКИХ упоминаний про staff-вход! -->
     {% endif %}
 </div>
 
