@@ -144,6 +144,34 @@ async def staff_login():
 
     return await render_template('staff_login.html')
 
+# Для клиентов
+@bp.route('/my_orders')
+async def my_orders():
+    if session.get('user_role') != 'client':
+        return redirect(url_for('main.index'))
+    return await render_template('my_orders.html')
+
+# Для мастеров
+@bp.route('/worker_orders')
+async def worker_orders():
+    if session.get('user_role') not in ['master', 'admin']:
+        return redirect(url_for('main.index'))
+    return await render_template('worker_orders.html')
+
+# Склад
+@bp.route('/warehouse')
+async def warehouse():
+    if session.get('user_role') not in ['admin', 'manager', 'master']:
+        return redirect(url_for('main.index'))
+    return await render_template('warehouse.html')
+
+# Все заказы (менеджеры)
+@bp.route('/all_orders')
+async def all_orders():
+    if session.get('user_role') not in ['manager', 'admin']:
+        return redirect(url_for('main.index'))
+    return await render_template('all_orders.html')
+
 # Выход
 @bp.route('/logout')
 async def logout():

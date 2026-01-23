@@ -6,98 +6,149 @@
 <div class="hero-section">
     <h1>Добро пожаловать в Автомастерскую «АвтоСервис»</h1>
     <p class="subtitle">Мы заботимся о вашем автомобиле!</p>
+
     {% if session.get('user_id') %}
+        <!-- Авторизованный пользователь -->
         <p>Здравствуйте, {{ session.get('user_name') }}!</p>
         <div class="mt-4">
-            <a href="{{ url_for('main.add_order') }}" class="btn btn-primary btn-lg">Добавить заказ</a>
-            <a href="{{ url_for('main.profil') }}" class="btn btn-outline-secondary btn-lg ms-2">Мой профиль</a>
+            {% if session.get('user_role') == 'client' %}
+                <!-- Только для клиентов -->
+                <a href="{{ url_for('main.my_orders') }}" class="btn btn-primary btn-lg">Мои заказы</a>
+                <a href="{{ url_for('main.profil') }}" class="btn btn-outline-secondary btn-lg ms-2">Профиль</a>
+            {% else %}
+                <!-- Для staff: быстрый доступ к своим задачам -->
+                <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary btn-lg">Панель управления</a>
+                <a href="{{ url_for('main.profil') }}" class="btn btn-outline-secondary btn-lg ms-2">Профиль</a>
+            {% endif %}
         </div>
     {% else %}
+        <!-- Неавторизованный: ТОЛЬКО клиентский вход -->
         <div class="mt-4">
-            <a href="{{ url_for('main.login') }}" class="btn btn-primary btn-lg">Войти</a>
-            <a href="{{ url_for('main.register') }}" class="btn btn-outline-secondary btn-lg ms-2">Зарегистрироваться</a>
+            <a href="{{ url_for('main.login') }}" class="btn btn-primary btn-lg">Войти как клиент</a>
+            <a href="{{ url_for('main.register') }}" class="btn btn-outline-secondary btn-lg ms-2">Регистрация</a>
         </div>
+        <!-- ❗ НИКАКИХ упоминаний про staff-вход! -->
     {% endif %}
 </div>
 
+<!-- Блоки функций — только после входа -->
+{% if session.get('user_id') %}
 <div class="row mt-5">
-    <!-- Блок "Учёт клиентов" — только для менеджеров, мастеров, админов -->
-    {% if session.get('user_role') in ['admin', 'manager', 'master'] %}
-    <div class="col-md-4">
+    <!-- Для клиентов: отслеживание заказов -->
+    {% if session.get('user_role') == 'client' %}
+    <div class="col-md-6">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Учет клиентов</h5>
-                <p class="card-text">Регистрируйте клиентов, их автомобили и историю обслуживания.</p>
-                <a href="{{ url_for('main.client_list') }}" class="btn btn-primary">Перейти</a>
+                <h5 class="card-title">Мои заказы</h5>
+                <p class="card-text">Отслеживайте статус ваших заказов и историю обращений.</p>
+                <a href="{{ url_for('main.my_orders') }}" class="btn btn-success">Посмотреть</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Контакты</h5>
+                <p class="card-text">Телефон: +7 (391) 123-45-67<br>Email: info@autoservice.ru</p>
+                <a href="#map" class="btn btn-outline-primary">Как нас найти</a>
             </div>
         </div>
     </div>
     {% endif %}
 
-    <!-- Блок "Оформление заказов" — доступен всем авторизованным -->
-    {% if session.get('user_id') %}
+    <!-- Для менеджеров: клиенты и заказы -->
+    {% if session.get('user_role') in ['manager', 'admin'] %}
     <div class="col-md-4">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Оформление заказов</h5>
-                <p class="card-text">Создавайте заказ-наряды, добавляйте услуги и запчасти.</p>
-                <a href="{{ url_for('main.add_order') }}" class="btn btn-success">Новый заказ</a>
+                <h5 class="card-title">Учёт клиентов</h5>
+                <p class="card-text">Список клиентов и их автомобилей.</p>
+                <a href="{{ url_for('main.client_list') }}" class="btn btn-primary">Клиенты</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Заказы клиентов</h5>
+                <p class="card-text">Просмотр и управление всеми заказами.</p>
+                <a href="{{ url_for('main.all_orders') }}" class="btn btn-warning">Все заказы</a>
             </div>
         </div>
     </div>
     {% endif %}
 
-    <!-- Блок "Отчетность" — только для персонала -->
+    <!-- Для мастеров: лист заказов -->
+    {% if session.get('user_role') in ['master', 'admin'] %}
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Мои заказы</h5>
+                <p class="card-text">Лист назначенных вам заказов.</p>
+                <a href="{{ url_for('main.worker_orders') }}" class="btn btn-info">Начать работу</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Склад — для всех staff -->
     {% if session.get('user_role') in ['admin', 'manager', 'master'] %}
     <div class="col-md-4">
         <div class="card h-100">
             <div class="card-body">
-                <h5 class="card-title">Отчетность</h5>
-                <p class="card-text">Генерируйте отчеты по выполненным работам и анализируйте статистику.</p>
+                <h5 class="card-title">Склад</h5>
+                <p class="card-text">Управление запчастями и материалами.</p>
+                <a href="{{ url_for('main.warehouse') }}" class="btn btn-secondary">Перейти</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Отчёты и управление — только для admin -->
+    {% if session.get('user_role') == 'admin' %}
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Управление персоналом</h5>
+                <p class="card-text">Назначение ролей и создание сотрудников.</p>
+                <a href="{{ url_for('main.user_list') }}" class="btn btn-danger">Сотрудники</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Отчётность</h5>
+                <p class="card-text">Финансовые и операционные отчёты.</p>
                 <a href="{{ url_for('main.reports') }}" class="btn btn-info">Отчёты</a>
             </div>
         </div>
     </div>
     {% endif %}
 </div>
-
-<!-- Если пользователь не авторизован -->
-{% if not session.get('user_id') %}
-<div class="text-center">
-    <p>Пожалуйста, <a href="{{ url_for('main.login') }}">войдите</a> или <a href="{{ url_for('main.register') }}">зарегистрируйтесь</a>.</p>
-</div>
 {% endif %}
 
-<!-- Карта Яндекса -->
+<!-- Карта всегда видна -->
 <div class="mt-5">
     <h2 class="text-center mb-3">Наш адрес</h2>
-    <div id="map" style="width: 1100px; height: 400px; border-radius: 0.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"></div>
+    <div id="map" style="width: 1100px; height: 400px; border-radius: 0.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin: 0 auto;"></div>
 </div>
 
-<!-- Подключение Yandex Maps API -->
+<!-- Yandex Maps -->
 <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
 <script type="text/javascript">
     ymaps.ready(function () {
-        // Координаты автомастерской (широта, долгота)
-        var coords = [55.984683, 92.882602]; 
-
+        var coords = [55.984683, 92.882602];
         var myMap = new ymaps.Map('map', {
             center: coords,
             zoom: 19,
-            controls: ['zoomControl', 'searchControl']
+            controls: ['zoomControl']
         });
-
-        var myPlacemark = new ymaps.Placemark(
-            coords,
-            {
-                balloonContent: '<strong>Автомастерская «АвтоСервис»</strong><br>г. Красноярск, Семафорная улица, 221А'
-            },
-            {
-                preset: 'islands#redDotIcon',
-                iconColor: '#ff0000'
-            }
-        );
-
+        var myPlacemark = new ymaps.Placemark(coords, {
+            balloonContent: '<strong>Автомастерская «АвтоСервис»</strong><br>г. Красноярск, Семафорная улица, 221А'
+        }, {
+            preset: 'islands#redDotIcon'
+        });
         myMap.geoObjects.add(myPlacemark);
     });
 </script>
