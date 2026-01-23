@@ -298,10 +298,7 @@ async def add_order():
     async with async_session() as s:
         clients_result = await s.execute(select(Client))
         clients = clients_result.scalars().all()
-        # Если у вас есть модель Car — добавьте аналогично
-        # cars_result = await s.execute(select(Car))
-        # cars = cars_result.scalars().all()
-        cars = []  # временно, пока нет модели Car
+        cars = []  
 
     services = [
         {'id': 1, 'name': 'Замена масла', 'price': 1500},
