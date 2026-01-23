@@ -1,3 +1,40 @@
 {% extends "base.html" %}
-<link rel="stylesheet" href="{{ url_for('static', filename='report.css') }}">
-{% block title %}Отчеты{% endblock %}
+<link rel="stylesheet" href="{{ url_for('static', filename='reports.css') }}">
+{% block title %}Отчёты{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <h1>Отчётность</h1>
+    <p class="subtitle">Статистика по работе мастерской</p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="stat-card">
+            <h3>{{ stats.total_clients }}</h3>
+            <p>Всего клиентов</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <h3>{{ stats.total_orders }}</h3>
+            <p>Создано заказов</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stat-card">
+            <h3>—</h3>
+            <p>Выручка (скоро)</p>
+        </div>
+    </div>
+</div>
+
+<div class="mt-5">
+    <h4>Подробные отчёты</h4>
+    <ul>
+        <li>Список выполненных заказов — в разработке</li>
+        <li>Анализ по услугам — в разработке</li>
+        <li>Отчёт по клиентам — в разработке</li>
+    </ul>
+</div>
+{% endblock %}

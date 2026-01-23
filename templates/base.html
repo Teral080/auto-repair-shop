@@ -11,9 +11,7 @@
     <nav class="global-section">
         <div class="container">
             <a class="navbar-brand" href="{{ url_for('main.index') }}">Автомастерская «АвтоСервис»</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
-            </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav-ms-auto">
                     <li class="nav-item">
@@ -48,7 +46,6 @@
                 {% for category, message in messages %}
                     <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
                         {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 {% endfor %}
             {% endif %}
