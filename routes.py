@@ -208,4 +208,4 @@ async def reports():
         await flash('У вас нет доступа к отчётам.', 'warning')
         return redirect(url_for('main.index'))
 
-    return await render_template('reports.html')
+    return await render_template('report.html')
