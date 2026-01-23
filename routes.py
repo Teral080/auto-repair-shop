@@ -138,11 +138,60 @@ async def client_list():
         return redirect(url_for('main.login'))
     if session.get('user_role') not in ['admin', 'manager', 'master']:
         await flash('У вас нет доступа к этому разделу.', 'warning')
-        return redirect(url_for('main.profil'))
+        return redirect(url_for('main.index'))
 
-    clients = session['clients']
-    return await render_template('clients.html', clients=[c.to_dict() for c in clients])
+    clients = await get_all_clients()  
+    return await render_template('clients.html', clients=clients)
 
+@bp.route('/users')
+async def user_list():
+    if session.get('user_role') != 'admin':
+        await flash('Доступ запрещён', 'danger')
+        return redirect(url_for('main.index'))
+    
+    async with async_session() as s:
+        result = await s.execute(select(User))
+        users = result.scalars().all()
+    return await render_template('user_list.html', users=users)
+
+# Создание сотрудника (только админ)
+@bp.route('/users/create', methods=['GET', 'POST'])
+async def create_staff():
+    if session.get('user_role') != 'admin':
+        await flash('Доступ запрещён', 'danger')
+        return redirect(url_for('main.index'))
+
+    if request.method == 'POST':
+        form = await request.form
+        full_name = form.get('full_name', '').strip()
+        email = form.get('email', '').strip()
+        phone = form.get('phone', '').strip()
+        password = form.get('password', '')
+        role = form.get('role', 'master')  # по умолчанию мастер
+
+        if not all([full_name, email, phone, password]):
+            await flash('Все поля обязательны!', 'danger')
+            return await render_template('staff_form.html')
+
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            await flash('Некорректный email!', 'danger')
+            return await render_template('staff_form.html')
+
+        existing = await get_user_by_email(email)
+        if existing:
+            await flash('Пользователь с таким email уже существует!', 'danger')
+            return await render_template('staff_form.html')
+
+        # Только админ может создавать staff
+        if role not in ['manager', 'master']:
+            await flash('Недопустимая роль!', 'danger')
+            return await render_template('staff_form.html')
+
+        await create_user(full_name, email, phone, password, role=role)
+        await flash(f'Сотрудник {full_name} успешно создан!', 'success')
+        return redirect(url_for('main.user_list'))
+
+    return await render_template('staff_form.html')
 
 # Добавление клиента
 @bp.route('/clients/add', methods=['GET', 'POST'])

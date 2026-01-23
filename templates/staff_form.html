@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Создать сотрудника{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <h1>Создать нового сотрудника</h1>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">ФИО *</label>
+                        <input type="text" name="full_name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email *</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Телефон *</label>
+                        <input type="tel" name="phone" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Пароль *</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Роль *</label>
+                        <select name="role" class="form-select" required>
+                            <option value="master">Мастер</option>
+                            <option value="manager">Менеджер</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success">Создать</button>
+                    <a href="{{ url_for('main.user_list') }}" class="btn btn-secondary ms-2">Отмена</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
