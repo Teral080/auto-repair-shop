@@ -172,6 +172,13 @@ async def all_orders():
         return redirect(url_for('main.index'))
     return await render_template('all_orders.html')
 
+# Панель управления для staff
+@bp.route('/dashboard')
+async def dashboard():
+    if not session.get('user_id') or session.get('user_role') == 'client':
+        return redirect(url_for('main.index'))
+    return await render_template('dashboard.html')
+
 # Выход
 @bp.route('/logout')
 async def logout():
@@ -287,8 +294,15 @@ async def add_order():
         await flash('Заказ успешно создан!', 'success')  
         return redirect(url_for('main.index'))
 
-    clients = session['clients']
-    cars = session['cars']
+    # Получаем данные из БД, а не из сессии!
+    async with async_session() as s:
+        clients_result = await s.execute(select(Client))
+        clients = clients_result.scalars().all()
+        # Если у вас есть модель Car — добавьте аналогично
+        # cars_result = await s.execute(select(Car))
+        # cars = cars_result.scalars().all()
+        cars = []  # временно, пока нет модели Car
+
     services = [
         {'id': 1, 'name': 'Замена масла', 'price': 1500},
         {'id': 2, 'name': 'Диагностика', 'price': 2000}
