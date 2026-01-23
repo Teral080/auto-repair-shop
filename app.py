@@ -37,7 +37,8 @@ def create_app():
                 s.add(new_admin)
                 await s.commit()
                 print(" Админ создан.")
-
+                
+    return app
             
 if __name__ == '__main__':
     app = create_app()
