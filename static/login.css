@@ -9,6 +9,12 @@
     max-width: 500px;
 }
 
+.btn-primary {
+    color: #ffffff;
+    background-color: transparent;
+    border-color: #6c757d;
+}
+
 .card {
     background: #fff;
     border: 1px solid #e0e0e0;
@@ -31,4 +37,5 @@
 
 .card-body {
     padding: 2px;
+    color: #333 ;
 }

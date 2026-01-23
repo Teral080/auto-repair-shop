@@ -169,6 +169,30 @@ body {
     border-color: #6c757d;
 }
 
+.btn-outline-primary {
+    color: #ffffff;
+    background-color: transparent;
+    border-color: #6c757d;
+}
+
+.btn-secondary {
+    color: #ffffff;
+    background-color: transparent;
+    border-color: #6c757d;
+}
+
+.btn-danger {
+    color: #ffffff;
+    background-color: transparent;
+    border-color: #6c757d;
+}
+
+.btn-warning {
+    color: #ffffff;
+    background-color: transparent;
+    border-color: #6c757d;
+}
+
 .btn-primary {
     color: #fff;
     background-color: transparent;
