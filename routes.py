@@ -217,7 +217,7 @@ async def user_list():
     async with async_session() as s:
         result = await s.execute(select(User))
         users = result.scalars().all()
-    return await render_template('user_list.html', users=users)
+    return await render_template('users_list.html', users=users)
 
 # Создание сотрудника (только админ)
 @bp.route('/users/create', methods=['GET', 'POST'])
@@ -326,4 +326,4 @@ async def reports():
         await flash('У вас нет доступа к отчётам.', 'warning')
         return redirect(url_for('main.index'))
 
-    return await render_template('report.html')
+    return await render_template('report.html',stats=session)
