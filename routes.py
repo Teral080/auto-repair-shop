@@ -2,7 +2,7 @@
 from quart import Blueprint, render_template, request, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
-from models import async_session, User, Client, Car
+from models import async_session, User, Client, Car, Order
 from sqlalchemy import select
 
 # Создаём Blueprint
@@ -170,6 +170,7 @@ async def warehouse():
 async def all_orders():
     if session.get('user_role') not in ['manager', 'admin']:
         return redirect(url_for('main.index'))
+
     return await render_template('all_orders.html')
 
 # Выход

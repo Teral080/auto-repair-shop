@@ -8,4 +8,26 @@
     <p class="subtitle">Все заказы мастерской</p>
 </div>
 
+<div class="container mt-4">
+    {% if session.get('user_role') in ['manager', 'admin'] %}
+        <div class="alert alert-info">
+            Здесь отображаются все заказы системы.
+        </div>
+
+        <div class="text-center">
+            <p>Пока нет заказов.</p>
+            <a href="{{ url_for('main.add_order') }}" class="btn btn-primary">Создать заказ</a>
+        </div>
+
+        {# {% for order in orders %} #}
+        {# <div>Заказ №{{ order.id }} — {{ order.client.full_name }}</div> #}
+        {# {% endfor %} #}
+
+    {% else %}
+        <div class="alert alert-danger">
+            Доступ только для менеджеров и администраторов.
+        </div>
+    {% endif %}
+</div>
+
 {% endblock %}
