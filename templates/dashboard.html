@@ -39,5 +39,11 @@
                     </div>
                 </div>
             </div>
-
+            </div>
+    {% else %}
+        <div class="alert alert-danger">
+            Доступ только для сотрудников.
+        </div>
+    {% endif %}
+</div>
 {% endblock %}
