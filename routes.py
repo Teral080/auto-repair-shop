@@ -172,13 +172,6 @@ async def all_orders():
         return redirect(url_for('main.index'))
     return await render_template('all_orders.html')
 
-# Панель управления для staff
-@bp.route('/dashboard')
-async def dashboard():
-    if not session.get('user_id') or session.get('user_role') == 'client':
-        return redirect(url_for('main.index'))
-    return await render_template('dashboard.html')
-
 # Выход
 @bp.route('/logout')
 async def logout():

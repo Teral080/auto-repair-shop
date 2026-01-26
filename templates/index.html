@@ -16,7 +16,6 @@
                 <a href="{{ url_for('main.my_orders') }}" class="btn btn-primary btn-lg">Мои заказы</a>
                 <a href="{{ url_for('main.profil') }}" class="btn btn-outline-secondary btn-lg ms-2">Профиль</a>
             {% else %}
-                <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary btn-lg">Панель управления</a>
                 <a href="{{ url_for('main.profil') }}" class="btn btn-outline-secondary btn-lg ms-2">Профиль</a>
             {% endif %}
         </div>
