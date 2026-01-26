@@ -39,19 +39,7 @@
             </div>
         </div>
     </nav>
-    <!-- Основное содержимое -->
-    <div class="container mt-4">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        {% block content %}
-    </div>
+{% block content %}
     <!-- Подвал -->
     <footer>
         <div class="container">
