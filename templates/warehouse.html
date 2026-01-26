@@ -8,4 +8,45 @@
     <p class="subtitle">Склад мастерской</p>
 </div>
 
+<div class="container mt-4">
+    {% if session.get('user_role') in ['admin', 'manager', 'master'] %}
+        {% if session.get('user_role') in ['admin', 'manager'] %}
+        <div class="text-end mb-3">
+            <a href="{{ url_for('main.add_part') }}" class="btn btn-success"> Добавить запчасть</a>
+        </div>
+        {% endif %}
+
+        {% if parts %}
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Название</th>
+                            <th>Цена (руб.)</th>
+                            <th>На складе</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for part in parts %}
+                        <tr>
+                            <td>{{ part.name }}</td>
+                            <td>{{ part.price }}</td>
+                            <td>{{ part.stock }} шт.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center">
+                <p>Склад пуст.</p>
+            </div>
+        {% endif %}
+
+    {% else %}
+        <div class="alert alert-danger">
+            Доступ только для персонала.
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

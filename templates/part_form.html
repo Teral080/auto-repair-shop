@@ -1,0 +1,39 @@
+<!-- templates/part_form.html -->
+{% extends "base.html" %}
+<link rel="stylesheet" href="{{ url_for('static', filename='part_form.css') }}">
+{% block title %}Новая запчасть | Автомастерская «АвтоСервис»{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <h1>Добавить запчасть на склад</h1>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Название *</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Цена (руб.) *</label>
+                        <input type="number" name="price" class="form-control" min="0" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Количество на складе *</label>
+                        <input type="number" name="stock" class="form-control" min="0" required>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success">Добавить</button>
+                    </div>
+                </form>
+                <div class="mt-3 text-center">
+                    <a href="{{ url_for('main.warehouse') }}">← Назад к складу</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
