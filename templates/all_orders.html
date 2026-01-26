@@ -1,6 +1,9 @@
 {% extends "base.html" %}
-{% block title %}Все заказы{% endblock %}
+<link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+{% block title %}Все заказы | Автомастерская «АвтоСервис»{% endblock %}
+
 {% block content %}
-<p>Добро пожаловать, {{ session.user_name }}!</p>
 <a href="{{ url_for('main.index') }}">← Назад</a>
-{% endblock %}
+<div class="hero-section">
+    <p class="subtitle">Все заказы мастерской</p>
+</div>
