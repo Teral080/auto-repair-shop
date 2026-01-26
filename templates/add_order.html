@@ -7,55 +7,32 @@
     <h1>Добро пожаловать!</h1>
     <p class="subtitle">Создайте свой заказ</p>
 </div>
+
 <div class="row justify-content-center">
-    <div class="col-md-8">
+    <div class="col-md-6">
         <div class="card">
-            <div class="card-header">
-                <h3>Добавить новый заказ-наряд</h3>
-            </div>
             <div class="card-body">
-                <form method="POST" action="{{ url_for('main.add_order') }}">
+                <form method="POST">
                     <div class="mb-3">
-                        <label for="client_id" class="form-label">Клиент</label>
-                        <select class="form-select" id="client_id" name="client_id" required>
+                        <label class="form-label">Клиент *</label>
+                        <select name="client_id" class="form-control" required>
                             <option value="">Выберите клиента</option>
-                            <!-- Пример данных, в реальном приложении будет заполняться из БД -->
-                            <option value="1">Иванов Иван Иванович (89991234567)</option>
-                            <option value="2">Петрова Анна Сергеевна (89887654321)</option>
-                        </select>
-                    </div>
-                   <div class="mb-3">
-                        <label for="car_id" class="form-label">Автомобиль</label>
-                        <select class="form-select" id="car_id" name="car_id" required>
-                            <option value="">Выберите автомобиль</option>
-                            <!-- Пример данных -->
-                            <option value="1">Toyota Camry 2020 (VIN: 1HGBH41JXMN109186)</option>
-                            <option value="2">BMW X5 2018 (VIN: WBAKR0C55FV398765)</option>
+                            {% for client in clients %}
+                            <option value="{{ client.id }}">{{ client.full_name }} ({{ client.phone }})</option>
+                            {% endfor %}
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="service_ids" class="form-label">Услуги</label>
-                        <select multiple class="form-select" id="service_ids" name="service_ids" required>
-                            <option value="1">Замена масла - 1500 руб.</option>
-                            <option value="2">Диагностика двигателя - 2000 руб.</option>
-                            <option value="3">Замена тормозных колодок - 2500 руб.</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="part_ids" class="form-label">Запчасти</label>
-                        <select multiple class="form-select" id="part_ids" name="part_ids">
-                            <option value="1">Масляный фильтр - 400 руб. (в наличии: 10 шт.)</option>
-                            <option value="2">Тормозные колодки - 2500 руб. (в наличии: 5 шт.)</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="description" class="form-label">Описание работ</label>
-                        <textarea class="form-control" id="description" name="description" rows="3" placeholder="Подробное описание работ..."></textarea>
+                        <label class="form-label">Описание работ</label>
+                        <textarea name="description" class="form-control" rows="3"></textarea>
                     </div>
                     <div class="d-grid">
                         <button type="submit" class="btn btn-primary">Создать заказ</button>
                     </div>
                 </form>
+                <div class="mt-3 text-center">
+                    <a href="{{ url_for('main.index') }}">← Отмена</a>
+                </div>
             </div>
         </div>
     </div>

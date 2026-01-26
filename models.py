@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime, Table
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.ext.declarative import declared_attr
@@ -77,7 +77,6 @@ class User(Base, BaseMixin):
             'role': self.role,
         }
 
-# === ДОБАВЛЯЕМ ЗАПЧАСТИ ===
 class Part(Base, BaseMixin):
     name = Column(String(255), nullable=False)
     price = Column(Integer, nullable=False)  # в рублях
@@ -91,7 +90,6 @@ class Part(Base, BaseMixin):
             'stock': self.stock,
         }
 
-# === ДОБАВЛЯЕМ ЗАКАЗЫ С ПОДДЕРЖКОЙ ЗАПЧАСТЕЙ ===
 order_part = Table(
     'order_part',
     Base.metadata,
