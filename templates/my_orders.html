@@ -9,31 +9,34 @@
 </div>
 
 <div class="container mt-4">
-    {% if session.get('user_role') == 'client' %}
-        <div class="alert alert-info">
-            Здравствуйте, {{ session.user_name }}!
+    {% if orders %}
+        <div class="table-container">
+            <table class="data-table">
+                <thead><tr>
+                    <th>ID</th>
+                    <th>Клиент</th>
+                    <th>Описание</th>
+                    <th>Статус</th>
+                    <th>Дата</th>
+                </tr></thead>
+                <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.client.full_name }}</td>
+                    <td>{{ order.description or '—' }}</td>
+                    <td>{{ order.status }}</td>
+                    <td>{{ order.created_at.strftime('%d.%m.%Y') }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
-
-        <div class="text-center">
-            <p>У вас пока нет заказов.</p>
-            <a href="{{ url_for('main.add_order') }}" class="btn btn-primary">➕ Создать заказ</a>
-        </div>
-
-        {# {% if my_orders %} #}
-        {# <ul> #}
-        {# {% for order in my_orders %} #}
-        {# <li>Заказ №{{ order.id }} — {{ order.status }} ({{ order.created_at.strftime('%d.%m.%Y') }})</li> #}
-        {# {% endfor %} #}
-        {# </ul> #}
-        {# {% else %} #}
-        {# <p>Заказов нет.</p> #}
-        {# {% endif %} #}
-
     {% else %}
-        <div class="alert alert-danger">
-            Доступ только для клиентов.
-        </div>
+        <p>У вас нет заказов.</p>
+        <a href="{{ url_for('main.add_order') }}" class="btn btn-primary">Создать заказ</a>
     {% endif %}
 </div>
+{% endblock %}
 
 {% endblock %}

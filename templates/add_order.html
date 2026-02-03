@@ -7,9 +7,8 @@
     <h1>Добро пожаловать!</h1>
     <p class="subtitle">Создайте свой заказ</p>
 </div>
-
 <div class="row justify-content-center">
-    <div class="col-md-6">
+    <div class="col-md-8">
         <div class="card">
             <div class="card-body">
                 <form method="POST">
@@ -26,6 +25,24 @@
                         <label class="form-label">Описание работ</label>
                         <textarea name="description" class="form-control" rows="3"></textarea>
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label">Запчасти</label>
+                        {% for part in parts %}
+                        <div class="form-check mb-2">
+                            <input 
+                                class="form-check-input" 
+                                type="checkbox" 
+                                name="part_ids" 
+                                value="{{ part.id }}" 
+                                id="part_{{ part.id }}"
+                            >
+                            <label class="form-check-label" for="part_{{ part.id }}">
+                                {{ part.name }} — {{ part.price }} руб. (остаток: {{ part.stock }})
+                            </label>
+                        </div>
+                        {% endfor %}
+                    </div>
+
                     <div class="d-grid">
                         <button type="submit" class="btn btn-primary">Создать заказ</button>
                     </div>
