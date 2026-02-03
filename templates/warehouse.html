@@ -24,6 +24,9 @@
                             <th>Название</th>
                             <th>Цена (руб.)</th>
                             <th>На складе</th>
+                            {% if session.user_role in ['admin', 'manager'] %}
+                                <th>Действия</th>
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
@@ -32,6 +35,16 @@
                             <td>{{ part.name }}</td>
                             <td>{{ part.price }}</td>
                             <td>{{ part.stock }} шт.</td>
+                            {% if session.user_role in ['admin', 'manager'] %}
+                            <td>
+                                <form method="POST" action="{{ url_for('main.delete_part', part_id=part.id) }}" style="display:inline;">
+                                    <button type="submit" class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Удалить запчасть?')">
+                                        Удалить
+                                    </button>
+                                </form>
+                            </td>
+                            {% endif %}
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -42,7 +55,6 @@
                 <p>Склад пуст.</p>
             </div>
         {% endif %}
-
     {% else %}
         <div class="alert alert-danger">
             Доступ только для персонала.

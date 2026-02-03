@@ -578,14 +578,10 @@ async def delete_client(client_id):
             await flash('Клиент не найден.', 'warning')
             return redirect(url_for('main.client_list'))
         
-        # ⚠️ Опционально: проверка, есть ли у клиента заказы
-        # Если есть — лучше не удалять, а помечать как удалённого
-        
         await s.delete(client)
         await s.commit()
         await flash(f'Клиент "{client.full_name}" удалён.', 'success')
         return redirect(url_for('main.client_list'))
-
 
 # Удаление сотрудника (только админ)
 @bp.route('/users/delete/<int:user_id>', methods=['POST'])
@@ -608,7 +604,6 @@ async def delete_user(user_id):
         await s.commit()
         await flash(f'Сотрудник "{user.full_name}" удалён.', 'success')
         return redirect(url_for('main.user_list'))
-
 
 # Удаление запчасти (админ и менеджер)
 @bp.route('/warehouse/delete/<int:part_id>', methods=['POST'])

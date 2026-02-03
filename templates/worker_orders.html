@@ -14,26 +14,40 @@
             Добро пожаловать, {{ session.user_name }}!
         </div>
 
-        <div class="text-center">
-            <p>Пока нет назначенных вам заказов.</p>
-            <a href="{{ url_for('main.all_orders') }}" class="btn btn-outline-secondary">Просмотреть все заказы</a>
-        </div>
-
-        {# {% if worker_orders %} #}
-        {# <ul> #}
-        {# {% for order in worker_orders %} #}
-        {# <li>Заказ №{{ order.id }} — {{ order.client.full_name }} ({{ order.status }})</li> #}
-        {# {% endfor %} #}
-        {# </ul> #}
-        {# {% else %} #}
-        {# <p>Нет заказов.</p> #}
-        {# {% endif %} #}
-        <a href="{{ url_for('main.work_report_form', order_id=order.id) }}" class="btn btn-sm btn-info">📝 Отчёт</a>
+        {% if orders %}
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Клиент</th>
+                            <th>Статус</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td>{{ order.id }}</td>
+                            <td>{{ order.client.full_name }}</td>
+                            <td>{{ order.status }}</td>
+                            <td>
+                                <a href="{{ url_for('main.work_report_form', order_id=order.id) }}" class="btn btn-sm btn-info">📝 Отчёт</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center">
+                <p>Нет заказов.</p>
+            </div>
+        {% endif %}
     {% else %}
         <div class="alert alert-danger">
             Доступ только для мастеров и администраторов.
         </div>
     {% endif %}
 </div>
-
 {% endblock %}
