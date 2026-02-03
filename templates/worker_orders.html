@@ -8,4 +8,32 @@
     <p class="subtitle">Заказы в работе мастерской</p>
 </div>
 
+<div class="container mt-4">
+    {% if session.get('user_role') in ['master', 'admin'] %}
+        <div class="alert alert-success">
+            Добро пожаловать, {{ session.user_name }}!
+        </div>
+
+        <div class="text-center">
+            <p>Пока нет назначенных вам заказов.</p>
+            <a href="{{ url_for('main.all_orders') }}" class="btn btn-outline-secondary">Просмотреть все заказы</a>
+        </div>
+
+        {# {% if worker_orders %} #}
+        {# <ul> #}
+        {# {% for order in worker_orders %} #}
+        {# <li>Заказ №{{ order.id }} — {{ order.client.full_name }} ({{ order.status }})</li> #}
+        {# {% endfor %} #}
+        {# </ul> #}
+        {# {% else %} #}
+        {# <p>Нет заказов.</p> #}
+        {# {% endif %} #}
+
+    {% else %}
+        <div class="alert alert-danger">
+            Доступ только для мастеров и администраторов.
+        </div>
+    {% endif %}
+</div>
+
 {% endblock %}

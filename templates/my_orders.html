@@ -8,4 +8,32 @@
     <p class="subtitle">Мои заказы в мастерской</p>
 </div>
 
+<div class="container mt-4">
+    {% if session.get('user_role') == 'client' %}
+        <div class="alert alert-info">
+            Здравствуйте, {{ session.user_name }}!
+        </div>
+
+        <div class="text-center">
+            <p>У вас пока нет заказов.</p>
+            <a href="{{ url_for('main.add_order') }}" class="btn btn-primary">➕ Создать заказ</a>
+        </div>
+
+        {# {% if my_orders %} #}
+        {# <ul> #}
+        {# {% for order in my_orders %} #}
+        {# <li>Заказ №{{ order.id }} — {{ order.status }} ({{ order.created_at.strftime('%d.%m.%Y') }})</li> #}
+        {# {% endfor %} #}
+        {# </ul> #}
+        {# {% else %} #}
+        {# <p>Заказов нет.</p> #}
+        {# {% endif %} #}
+
+    {% else %}
+        <div class="alert alert-danger">
+            Доступ только для клиентов.
+        </div>
+    {% endif %}
+</div>
+
 {% endblock %}
