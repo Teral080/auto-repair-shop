@@ -170,44 +170,44 @@ body {
 }
 
 .btn-outline-primary {
-    color: #ffffff;
+    color: #000000;
     background-color: transparent;
     border-color: #6c757d;
 }
 
 .btn-secondary {
-    color: #ffffff;
+    color: #000000;
     background-color: transparent;
     border-color: #6c757d;
 }
 
 .btn-danger {
-    color: #ffffff;
+    color: #000000;
     background-color: transparent;
     border-color: #6c757d;
 }
 
 .btn-warning {
-    color: #ffffff;
+    color: #000000;
     background-color: transparent;
     border-color: #6c757d;
 }
 
 .btn-primary {
-    color: #fff;
+    color: #000000;
     background-color: transparent;
     border-color: #6c757d;
     border-radius: 5px;
 }
 
 .btn-success {
-    color: #fff;
+    color: #080808;
     background-color: transparent;
     border-color: #6c757d;
     border-radius: 5px;
 }
 .btn-info {
-    color: #fff;
+    color: #000000;
     background-color: transparent;
     border-color: #6c757d;
     border-radius: 5px;
