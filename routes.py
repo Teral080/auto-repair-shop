@@ -1,11 +1,12 @@
 # routes.py
-from quart import Blueprint, render_template, request, redirect, url_for, flash, session
+from quart import Blueprint, render_template, request, redirect, url_for, flash, session, send_file
 from werkzeug.security import generate_password_hash, check_password_hash
 import re
 from models import async_session, User, Client, Car, Part, Order, order_part
 from sqlalchemy import select, func
 import os
 import tempfile
+from datetime import datetime  
 from docx import Document
 from docx.shared import Pt
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -15,6 +16,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
+from config import Config  
 
 # Создаём Blueprint
 bp = Blueprint('main', __name__)
@@ -562,3 +564,66 @@ async def work_report_form(order_id):
                 os.unlink(tmp_path)
 
     return await render_template('work_report_form.html', order_id=order_id, client=client)
+
+# Удаление клиента (только админ)
+@bp.route('/clients/delete/<int:client_id>', methods=['POST'])
+async def delete_client(client_id):
+    if session.get('user_role') != 'admin':
+        await flash('Только администратор может удалять клиентов.', 'danger')
+        return redirect(url_for('main.client_list'))
+
+    async with async_session() as s:
+        client = await s.get(Client, client_id)
+        if not client:
+            await flash('Клиент не найден.', 'warning')
+            return redirect(url_for('main.client_list'))
+        
+        # ⚠️ Опционально: проверка, есть ли у клиента заказы
+        # Если есть — лучше не удалять, а помечать как удалённого
+        
+        await s.delete(client)
+        await s.commit()
+        await flash(f'Клиент "{client.full_name}" удалён.', 'success')
+        return redirect(url_for('main.client_list'))
+
+
+# Удаление сотрудника (только админ)
+@bp.route('/users/delete/<int:user_id>', methods=['POST'])
+async def delete_user(user_id):
+    if session.get('user_role') != 'admin':
+        await flash('Только администратор может удалять сотрудников.', 'danger')
+        return redirect(url_for('main.user_list'))
+
+    async with async_session() as s:
+        user = await s.get(User, user_id)
+        if not user:
+            await flash('Пользователь не найден.', 'warning')
+            return redirect(url_for('main.user_list'))
+        
+        if user.role == 'admin':
+            await flash('Нельзя удалить другого администратора.', 'danger')
+            return redirect(url_for('main.user_list'))
+
+        await s.delete(user)
+        await s.commit()
+        await flash(f'Сотрудник "{user.full_name}" удалён.', 'success')
+        return redirect(url_for('main.user_list'))
+
+
+# Удаление запчасти (админ и менеджер)
+@bp.route('/warehouse/delete/<int:part_id>', methods=['POST'])
+async def delete_part(part_id):
+    if session.get('user_role') not in ['admin', 'manager']:
+        await flash('Только админ и менеджер могут удалять запчасти.', 'danger')
+        return redirect(url_for('main.warehouse'))
+
+    async with async_session() as s:
+        part = await s.get(Part, part_id)
+        if not part:
+            await flash('Запчасть не найдена.', 'warning')
+            return redirect(url_for('main.warehouse'))
+
+        await s.delete(part)
+        await s.commit()
+        await flash(f'Запчасть "{part.name}" удалена.', 'success')
+        return redirect(url_for('main.warehouse'))

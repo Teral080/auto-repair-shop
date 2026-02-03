@@ -1,4 +1,7 @@
 import os
+from dotenv import load_dotenv 
+
+load_dotenv()
 
 class Config:
     SECRET_KEY = os.getenv('SECRET_KEY', '1111')
@@ -11,9 +14,9 @@ class Config:
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 587
     MAIL_USE_TLS = True
-    MAIL_USERNAME = 'koliawartander@gmail.com'        
-    MAIL_PASSWORD = 'raytvill2004AAAA!'         
-    MAIL_DEFAULT_SENDER = 'djodjodjo2319@gmail.com' 
+    MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
+    MAIL_USERNAME = os.getenv("MAIL_USERNAME")       
+    MAIL_DEFAULT_SENDER = 'koliawartander@gmail.com' 
 
 from sqlalchemy import create_engine
 from config import Config
