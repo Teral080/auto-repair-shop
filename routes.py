@@ -4,6 +4,17 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import re
 from models import async_session, User, Client, Car, Part, Order, order_part
 from sqlalchemy import select, func
+import os
+import tempfile
+from docx import Document
+from docx.shared import Pt
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+import aiofiles
+import aiosmtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
 
 # Создаём Blueprint
 bp = Blueprint('main', __name__)
@@ -125,6 +136,33 @@ async def get_dashboard_stats():
             'parts_count': parts_count or 0,
             'orders_count': orders_count or 0,
         }
+    
+def generate_work_report(order_id: int, client_name: str, work_description: str, total_cost: int):
+    doc = Document()
+    
+    # Заголовок
+    title = doc.add_heading('Отчёт о выполненных работах', 0)
+    title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    
+    # Данные
+    doc.add_paragraph(f"Заказ №: {order_id}")
+    doc.add_paragraph(f"Клиент: {client_name}")
+    doc.add_paragraph(f"Дата: {datetime.now().strftime('%d.%m.%Y')}")
+    doc.add_paragraph()
+    
+    # Описание работ
+    doc.add_heading('Выполненные работы:', level=1)
+    doc.add_paragraph(work_description)
+    
+    # Стоимость
+    doc.add_paragraph()
+    doc.add_paragraph(f"Итого к оплате: {total_cost} руб.", style='Intense Quote')
+    
+    # Подпись
+    doc.add_paragraph()
+    doc.add_paragraph("Мастер: _________________________")
+    
+    return doc
 
 # Главная страница
 @bp.route('/')
@@ -422,3 +460,105 @@ async def add_order():
     clients = await get_all_clients()
     parts = await get_all_parts()
     return await render_template('add_order.html', clients=clients, parts=parts)
+
+@bp.route('/worker_orders/report/<int:order_id>', methods=['GET', 'POST'])
+async def work_report_form(order_id):
+    if session.get('user_role') not in ['master', 'admin']:
+        await flash('Доступ запрещён.', 'danger')
+        return redirect(url_for('main.worker_orders'))
+
+    # Получаем заказ и клиента
+    async with async_session() as s:
+        order = await s.get(Order, order_id)
+        if not order:
+            await flash('Заказ не найден.', 'danger')
+            return redirect(url_for('main.worker_orders'))
+        
+        client = await s.get(Client, order.client_id)
+        if not client:
+            await flash('Клиент не найден.', 'danger')
+            return redirect(url_for('main.worker_orders'))
+
+    if request.method == 'POST':
+        form = await request.form
+        work_description = form.get('work_description', '').strip()
+        total_cost_str = form.get('total_cost', '').strip()
+        action = form.get('action')  # 'download' или 'email'
+        email_to = form.get('email_to', '').strip()
+
+        if not work_description or not total_cost_str:
+            await flash('Все поля обязательны!', 'danger')
+            return await render_template('work_report_form.html', 
+                                       order_id=order_id, 
+                                       client=client)
+
+        try:
+            total_cost = int(total_cost_str)
+            if total_cost <= 0:
+                raise ValueError
+        except ValueError:
+            await flash('Стоимость должна быть положительным числом.', 'danger')
+            return await render_template('work_report_form.html', 
+                                       order_id=order_id, 
+                                       client=client)
+
+        # Генерируем документ
+        doc = generate_work_report(order_id, client.full_name, work_description, total_cost)
+        
+        # Сохраняем во временный файл
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.docx') as tmp:
+            doc.save(tmp.name)
+            tmp_path = tmp.name
+
+        try:
+            if action == 'download':
+                # Отправляем файл на скачивание
+                filename = f"Отчёт_заказ_{order_id}.docx"
+                return await send_file(tmp_path, as_attachment=True, attachment_filename=filename)
+
+            elif action == 'email':
+                if not email_to or not re.match(r"[^@]+@[^@]+\.[^@]+", email_to):
+                    await flash('Укажите корректный email для отправки.', 'danger')
+                    return await render_template('work_report_form.html', 
+                                               order_id=order_id, 
+                                               client=client)
+
+                # Отправка email
+                msg = MIMEMultipart()
+                msg['From'] = Config.MAIL_USERNAME
+                msg['To'] = email_to
+                msg['Subject'] = f"Отчёт по заказу №{order_id}"
+
+                body = f"Здравствуйте!\n\nВо вложении отчёт по выполненным работам по заказу №{order_id}."
+                msg.attach(MIMEText(body, 'plain', 'utf-8'))
+
+                # Прикрепляем файл
+                with open(tmp_path, "rb") as f:
+                    part = MIMEBase('application', 'vnd.openxmlformats-officedocument.wordprocessingml.document')
+                    part.set_payload(f.read())
+                encoders.encode_base64(part)
+                part.add_header(
+                    'Content-Disposition',
+                    f'attachment; filename="Отчёт_заказ_{order_id}.docx"'
+                )
+                msg.attach(part)
+
+                # Отправка
+                await aiosmtplib.send(
+                    msg,
+                    hostname=Config.MAIL_SERVER,
+                    port=Config.MAIL_PORT,
+                    start_tls=True,
+                    username=Config.MAIL_USERNAME,
+                    password=Config.MAIL_PASSWORD
+                )
+
+                await flash('Отчёт успешно отправлен на email!', 'success')
+                return redirect(url_for('main.worker_orders'))
+
+        finally:
+            # Удаляем временный файл
+            if os.path.exists(tmp_path):
+                os.unlink(tmp_path)
+
+    return await render_template('work_report_form.html', order_id=order_id, client=client)

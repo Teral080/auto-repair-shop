@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+<link rel="stylesheet" href="{{ url_for('static', filename='work_report_form.css') }}">
+{% block title %}Отчёт о работе | Автомастерская «АвтоСервис»{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <h1>Отчёт о работе</h1>
+    <p class="subtitle">Заказ №{{ order_id }} — {{ client.full_name }}</p>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Описание выполненных работ *</label>
+                        <textarea name="work_description" class="form-control" rows="5" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Стоимость работ (руб.) *</label>
+                        <input type="number" name="total_cost" class="form-control" min="1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email для отправки (опционально)</label>
+                        <input type="email" name="email_to" class="form-control" placeholder="client@example.com">
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" name="action" value="download" class="btn btn-primary"> Скачать DOCX</button>
+                        <button type="submit" name="action" value="email" class="btn btn-success"> Отправить на email</button>
+                    </div>
+                </form>
+                <div class="mt-3 text-center">
+                    <a href="{{ url_for('main.worker_orders') }}">← Назад к заказам</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

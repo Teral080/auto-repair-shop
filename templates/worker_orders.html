@@ -28,7 +28,7 @@
         {# {% else %} #}
         {# <p>Нет заказов.</p> #}
         {# {% endif %} #}
-
+        <a href="{{ url_for('main.work_report_form', order_id=order.id) }}" class="btn btn-sm btn-info">📝 Отчёт</a>
     {% else %}
         <div class="alert alert-danger">
             Доступ только для мастеров и администраторов.

@@ -7,6 +7,13 @@ class Config:
         'postgresql+asyncpg://postgres:postgres@localhost:5432/auto_repair'
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+        # === Настройки электронной почты ===
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = 'koliawartander@gmail.com'        
+    MAIL_PASSWORD = 'raytvill2004AAAA!'         
+    MAIL_DEFAULT_SENDER = 'djodjodjo2319@gmail.com' 
 
 from sqlalchemy import create_engine
 from config import Config
