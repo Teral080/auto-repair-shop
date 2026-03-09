@@ -3,6 +3,7 @@
 {% block title %}Профиль{% endblock %}
 
 {% block content %}
+<a href="{{ url_for('main.index') }}">← Назад</a>
 <div class="hero-section">
     <h1>Добро пожаловать!</h1>
     <p class="subtitle">ваши данные</p>
@@ -21,7 +22,7 @@
             </div>
         </div>
     {% else %}
-        <div class="profile-card">
+        <div class="profile-card-out">
             <p>Вы не авторизованы.</p>
             <a href="{{ url_for('main.login') }}" class="login-btn">Войти</a>
         </div>

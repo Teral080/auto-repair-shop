@@ -181,6 +181,13 @@ async def register():
         phone = form.get('phone', '').strip()
         password = form.get('password', '')
         confirm_password = form.get('confirm_password', '')
+        new_user = await create_user(full_name, email, phone, password, role='client')
+        await create_client(
+            full_name=full_name,
+            phone=phone,
+            email=email,
+            address=None
+        )
 
         if not all([full_name, email, phone, password]):
             await flash('Все поля обязательны!', 'danger')
@@ -253,7 +260,7 @@ async def staff_login():
 
     return await render_template('staff_login.html')
 
-@bp.route('/my_orders')
+@bp.route('/my_orders')  # ← Декоратор обязателен!
 async def my_orders():
     if session.get('user_role') != 'client':
         await flash('Доступ только для клиентов.', 'danger')

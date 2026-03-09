@@ -1,42 +1,44 @@
 {% extends "base.html" %}
-<link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+
 {% block title %}Мои заказы | Автомастерская «АвтоСервис»{% endblock %}
 
 {% block content %}
-<a href="{{ url_for('main.index') }}">← Назад</a>
 <div class="hero-section">
     <p class="subtitle">Мои заказы в мастерской</p>
+    <a href="{{ url_for('main.index') }}" style="color: white; text-decoration: none;">← Назад на главную</a>
 </div>
 
 <div class="container mt-4">
     {% if orders %}
         <div class="table-container">
             <table class="data-table">
-                <thead><tr>
-                    <th>ID</th>
-                    <th>Клиент</th>
-                    <th>Описание</th>
-                    <th>Статус</th>
-                    <th>Дата</th>
-                </tr></thead>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Описание</th>
+                        <th>Статус</th>
+                        <th>Дата</th>
+                    </tr>
+                </thead>
                 <tbody>
                 {% for order in orders %}
                 <tr>
                     <td>{{ order.id }}</td>
-                    <td>{{ order.client.full_name }}</td>
-                    <td>{{ order.description or '—' }}</td>
-                    <td>{{ order.status }}</td>
-                    <td>{{ order.created_at.strftime('%d.%m.%Y') }}</td>
+                    <td>{{ order.description if order.description else 'Нет описания' }}</td>
+                    <td>
+                        <span class="badge">{{ order.status }}</span>
+                    </td>
+                    <td>{{ order.created_at.strftime('%d.%m.%Y') if order.created_at else '—' }}</td>
                 </tr>
                 {% endfor %}
                 </tbody>
             </table>
         </div>
     {% else %}
-        <p>У вас нет заказов.</p>
-        <a href="{{ url_for('main.add_order') }}" class="btn btn-primary">Создать заказ</a>
+        <div class="alert alert-info">
+            <p>У вас пока нет активных заказов.</p>
+            <a href="{{ url_for('main.add_order') }}" class="btn btn-primary">Создать заказ</a>
+        </div>
     {% endif %}
 </div>
-{% endblock %}
-
 {% endblock %}

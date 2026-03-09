@@ -3,6 +3,13 @@ body {
     font-family: Arial, sans-serif;
     background-color: #e2e2e2;
     color: #333;
+    background-image: url('images/i.jpg'); 
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-attachment: fixed; 
+    min-height: 100vh;
+    margin: 0;
 }
 
 .container {
@@ -10,6 +17,7 @@ body {
     margin: 0 auto;
     padding: 15px;
     min-height: 80vh;
+    color: #ffffff;
 }
 
 /* Шапка */
@@ -17,13 +25,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #7f8ca3;
+    background-color: #3065c0;
     height: 80px;
     padding: 20px;
     box-sizing: border-box;
     font-family: 'Times New Roman', Times, serif;
     font-size: 25px;
-    color: rgb(36, 64, 221);
+    color: rgb(255, 255, 255);
 }
 
 .global-section .container {
@@ -39,6 +47,7 @@ body {
     text-decoration: none;
     color: inherit;
     outline: none;
+    color: #ffffff;
 }
 
 .navbar-brand {
@@ -63,7 +72,7 @@ body {
 }
 
 .navbar-nav-ms-auto .nav-link {
-    color: rgb(36, 64, 221);
+    color: rgb(0, 0, 0);
     text-decoration: none;
     padding: 5px 10px;
     border-radius: 4px;
@@ -84,19 +93,19 @@ body {
 
 .hero-section h1 {
     font-size: 24px;
-    color: #333;
+    color: #ffffff;
     margin-bottom: 0.5rem;
 }
 
 .subtitle {
-    font-size: 19px;
+    font-size: 20px;
     color: #000000;
     margin-bottom: 1rem;
 }
 
 .hero-section p {
-    font-size: 19px;
-    color: #000000;
+    font-size: 20px;
+    color: #ffffff;
     margin-bottom: 1rem;
 }
 
@@ -116,6 +125,20 @@ body {
     flex: 0 0 calc(33.333% - 20px);
     padding: 0 10px;
     margin-bottom: 1.5rem;
+    color: #ffffff;
+}
+
+.mt-5 {
+    flex: 0 0 calc(33.333% - 20px);
+    padding: 0 10px;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+}
+
+.mt-3-text-center{
+    text-decoration: none;
+    color: inherit;
+    outline: flex;
 }
 
 .card {
@@ -145,6 +168,16 @@ body {
     margin-bottom: 7px;
 }
 
+.profile-card h2 {
+    margin-top: 0;
+    color: #ffffff;
+}
+
+.profile-card p {
+    margin: 0.5rem 0;
+    color: #ffffff;
+}
+
 .btn {
     display: inline-block;
     padding: 2px 15px;
@@ -154,18 +187,26 @@ body {
     text-align: center;
     text-decoration: none;
     border: 1px solid transparent;
+    background-color: #ffffff;
+}
+
+.btn-sm {
+    color: #ffffff;
+    background-color: transparent;
+    border-color: #6c757d;
 }
 
 .btn-lg {
     padding: 1.5px 8px;
     font-size: 17px;
     border-radius: 5px;
-    color: #ffffff;
+    color: #000000;
+    background-color: #ffffff;
 }
 
 .btn-outline-secondary {
-    color: #ffffff;
-    background-color: transparent;
+    color: #000000;
+    background-color: #ffffff;
     border-color: #6c757d;
 }
 
@@ -218,6 +259,10 @@ body {
     color: white;
 }
 
+.table {
+color: #ffffff;
+}
+
 #map {
     margin: 5px auto;
     display: block;
@@ -227,5 +272,5 @@ body {
 
 h2.text-center {
     text-align: center;
-    color: #333;
+    color: #ffffff;
 }

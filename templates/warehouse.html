@@ -38,7 +38,7 @@
                             {% if session.user_role in ['admin', 'manager'] %}
                             <td>
                                 <form method="POST" action="{{ url_for('main.delete_part', part_id=part.id) }}" style="display:inline;">
-                                    <button type="submit" class="btn btn-sm btn-danger"
+                                    <button type="submit" class="btn btn-sm "
                                             onclick="return confirm('Удалить запчасть?')">
                                         Удалить
                                     </button>
