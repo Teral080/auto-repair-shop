@@ -1,0 +1,16 @@
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+    margin: 25px;
+    margin-top: 22px;
+    border-radius: 12px;
+}
+.col-md-4 {
+    flex: 0 0 calc(33.333% - 20px);
+    padding: 0 10px;
+    margin-bottom: 1.5rem;
+    color: #000000;
+    background: #fff;
+    border-radius: 12px;
+}

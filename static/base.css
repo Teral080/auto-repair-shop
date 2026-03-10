@@ -109,12 +109,78 @@ body {
     margin-bottom: 1rem;
 }
 
+.alert alert-info {
+    background: #fff;
+    color: #000000;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 12px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.profile-content {
+    flex: 0 0 calc(33.333% - 20px);
+    padding: 0 10px;
+    margin-bottom: 1.5rem;
+    color: #000000;
+    background: #fff;
+    border-radius: 12px;
+}
+
+.container-mt-7-7{
+    background: #fff;
+    color: #000000;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 12px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.container-mt-4-4{
+    background: #fff;
+    color: #000000;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 12px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
 .mt-4 a {
     text-decoration: none;
     color: inherit;
     outline: flex;
 }
+.row-4 {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 10px;
+    margin: 25px;
+    margin-top: 22px;
+    border-radius: 12px;
+}
+.col-md-4-4 {
+    flex: 0 0 calc(33.333% - 20px);
+    padding: 0 10px;
+    margin-bottom: 1.5rem;
+    color: #000000;
+    background: #fff;
+    border-radius: 12px;
+}
 
+.mt-5-5{
+    flex: 0 0 calc(33.333% - 20px);
+    padding: 0 10px;
+    margin-bottom: 1.5rem;
+    color: #000000;
+    background: #fff;
+    border-radius: 12px;
+}
 .row {
     display: flex;
     flex-wrap: wrap;
@@ -139,6 +205,37 @@ body {
     text-decoration: none;
     color: inherit;
     outline: flex;
+}
+
+.badge {
+    background: #fff;
+    color: #000000;
+}
+
+.table {
+    background: #fff;
+    color: #000000;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 12px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.table tr{
+    color: #000000;
+}
+
+.table-container {
+    background: #fff;
+    color: #000000;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 12px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .card {
@@ -170,12 +267,12 @@ body {
 
 .profile-card h2 {
     margin-top: 0;
-    color: #ffffff;
+    color: #000000;
 }
 
 .profile-card p {
     margin: 0.5rem 0;
-    color: #ffffff;
+    color: #000000;
 }
 
 .btn {
@@ -191,7 +288,7 @@ body {
 }
 
 .btn-sm {
-    color: #ffffff;
+    color: #000000;
     background-color: transparent;
     border-color: #6c757d;
 }
