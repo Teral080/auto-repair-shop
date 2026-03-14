@@ -9,7 +9,7 @@
 </div>
 
 <div class="container-mt-4-4">
-    {% if session.get('user_role') in ['master', 'admin'] %}
+    {% if session.get('user_role') in ['master', 'admin', 'manager'] %}
         <div class="alert alert-success">
             Добро пожаловать, {{ session.user_name }}!
         </div>

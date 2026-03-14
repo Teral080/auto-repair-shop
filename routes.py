@@ -17,6 +17,8 @@ from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
 from config import Config  
+from sqlalchemy.orm import joinedload
+from collections import Counter
 
 # Создаём Blueprint
 bp = Blueprint('main', __name__)
@@ -45,8 +47,8 @@ async def get_all_orders():
     async with async_session() as s:
         result = await s.execute(
             select(Order)
-            .join(Client, Order.client_id == Client.id)
-            .join(User, Order.user_id == User.id)
+            .options(joinedload(Order.client), joinedload(Order.user))
+            .order_by(Order.created_at.desc())
         )
         return result.scalars().all()
 
@@ -54,8 +56,9 @@ async def get_my_orders(user_id: int):
     async with async_session() as s:
         result = await s.execute(
             select(Order)
-            .join(Client, Order.client_id == Client.id)
+            .options(joinedload(Order.client))
             .where(Order.user_id == user_id)
+            .order_by(Order.created_at.desc())
         )
         return result.scalars().all()
 
@@ -109,19 +112,23 @@ async def create_order(client_id: int, user_id: int, description: str, part_ids:
         s.add(new_order)
         await s.flush()
 
-        for part_id_str in part_ids:
+        counts = Counter(part_ids)
+
+        for part_id_str, qty in counts.items():
             part_id = int(part_id_str)
             part = await s.get(Part, part_id)
-            if part and part.stock > 0:
-                part.stock -= 1
+            
+            if part and part.stock >= qty:
+                part.stock -= qty
                 await s.execute(order_part.insert().values(
                     order_id=new_order.id,
                     part_id=part_id,
-                    quantity=1
+                    quantity=qty
                 ))
             else:
                 await s.rollback()
-                raise ValueError(f"Недостаточно запчастей: {part.name}")
+                part_name = part.name if part else f"ID {part_id}"
+                raise ValueError(f"Недостаточно запчастей на складе: {part_name}")
         
         await s.commit()
         return new_order
@@ -172,6 +179,7 @@ async def index():
     return await render_template('index.html')
 
 # Регистрация
+# Регистрация
 @bp.route('/register', methods=['GET', 'POST'])
 async def register():
     if request.method == 'POST':
@@ -181,7 +189,26 @@ async def register():
         phone = form.get('phone', '').strip()
         password = form.get('password', '')
         confirm_password = form.get('confirm_password', '')
-        new_user = await create_user(full_name, email, phone, password, role='client')
+
+        if not all([full_name, email, phone, password]):
+            flash('Все поля обязательны!', 'danger')
+            return await render_template('reg.html')
+
+        if password != confirm_password:
+            flash('Пароли не совпадают!', 'danger')
+            return await render_template('reg.html')
+
+        # 3. Проверяем формат email
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            flash('Некорректный email!', 'danger')
+            return await render_template('reg.html')
+
+        existing = await get_user_by_email(email)
+        if existing:
+            flash('Пользователь с таким email уже существует!', 'danger')
+            return await render_template('reg.html')
+
+        await create_user(full_name, email, phone, password, role='client')
         await create_client(
             full_name=full_name,
             phone=phone,
@@ -189,25 +216,7 @@ async def register():
             address=None
         )
 
-        if not all([full_name, email, phone, password]):
-            await flash('Все поля обязательны!', 'danger')
-            return await render_template('reg.html')
-
-        if password != confirm_password:
-            await flash('Пароли не совпадают!', 'danger')
-            return await render_template('reg.html')
-
-        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-            await flash('Некорректный email!', 'danger')
-            return await render_template('reg.html')
-
-        existing = await get_user_by_email(email)
-        if existing:
-            await flash('Пользователь с таким email уже существует!', 'danger')
-            return await render_template('reg.html')
-
-        await create_user(full_name, email, phone, password, role='client')
-        await flash('Регистрация успешна! Теперь вы можете войти.', 'success')
+        flash('Регистрация успешна! Теперь вы можете войти.', 'success')
         return redirect(url_for('main.login'))
 
     return await render_template('reg.html')
@@ -445,25 +454,33 @@ async def add_order():
     if request.method == 'POST':
         form = await request.form
         client_id = form.get('client_id')
-        car_id = form.get('car_id')  # опционально
+        car_id = form.get('car_id')  
         description = form.get('description', '').strip()
-        part_ids = request.form.getlist('part_ids')
-        quantities = {k.replace('quantity_', ''): int(v) for k, v in form.items() if k.startswith('quantity_')}
+        
+        # Получаем список ID запчастей
+        part_ids = (await request.form).getlist('part_ids')
 
         if not client_id:
-            await flash('Выберите клиента!', 'danger')
+            flash('Выберите клиента!', 'danger')
             return redirect(url_for('main.add_order'))
 
         try:
             client_id = int(client_id)
-        except ValueError:
-            await flash('Некорректный клиент!', 'danger')
+            # Пытаемся создать заказ
+            await create_order(client_id, session['user_id'], description, part_ids)
+            flash('Заказ создан!', 'success')
+            return redirect(url_for('main.all_orders' if session.get('user_role') != 'client' else 'main.my_orders'))
+            
+        except ValueError as e:
+            # Если возникла ошибка (например, "Недостаточно запчастей"), 
+            # мы её ловим и выводим текст ошибки через flash
+            flash(str(e), 'danger')
             return redirect(url_for('main.add_order'))
-
-        # Создаём заказ с запчастями
-        await create_order(client_id, session['user_id'], description, part_ids)
-        await flash('Заказ создан!', 'success')
-        return redirect(url_for('main.all_orders' if session.get('user_role') != 'client' else 'main.my_orders'))
+        
+        except Exception as e:
+            # На случай других непредвиденных ошибок
+            flash(f"Произошла ошибка: {e}", 'danger')
+            return redirect(url_for('main.add_order'))
 
     # GET: загружаем данные
     clients = await get_all_clients()
@@ -523,7 +540,7 @@ async def work_report_form(order_id):
             if action == 'download':
                 # Отправляем файл на скачивание
                 filename = f"Отчёт_заказ_{order_id}.docx"
-                return await send_file(tmp_path, as_attachment=True, attachment_filename=filename)
+                return await send_file(tmp_path, as_attachment=True, download_name=filename)
 
             elif action == 'email':
                 if not email_to or not re.match(r"[^@]+@[^@]+\.[^@]+", email_to):
